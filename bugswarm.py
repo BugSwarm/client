@@ -2,7 +2,7 @@ import click
 import pprint
 import subprocess
 
-from pymongo import MongoClient
+# from pymongo import MongoClient
 
 DOCKER_HUB_ARTIFACT_USER = 'yclliu'
 DOCKER_HUB_ARTIFACT_REPO = 'artifacts'
@@ -40,10 +40,10 @@ def _docker_run(image_tag):
     return result, returncode
 
 
-def _get_artifact_image_tag(artifact_id):
-    client = MongoClient('mongodb://127.0.0.1:3001/meteor')
-    db = client.meteor
-    coll = db['artifacts']
-    cursor = coll.find({'aid': artifact_id})
-    pprint.pprint(cursor)
-    return cursor
+# def _get_artifact_image_tag(artifact_id):
+#     client = MongoClient('mongodb://127.0.0.1:3001/meteor')
+#     db = client.meteor
+#     coll = db['artifacts']
+#     cursor = coll.find({'aid': artifact_id})
+#     pprint.pprint(cursor)
+#     return cursor
