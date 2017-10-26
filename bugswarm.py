@@ -2,9 +2,6 @@ import click
 import pprint
 import subprocess
 
-from typing import Optional
-from typing import Tuple
-
 from pymongo import MongoClient
 
 DOCKER_HUB_ARTIFACT_USER = 'yclliu'
