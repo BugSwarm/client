@@ -33,7 +33,7 @@ def run(image_tag):
     _docker_run(image_tag)
 
 
-def _docker_run(image_tag) -> Tuple[Optional[str], int]:
+def _docker_run(image_tag):
     image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
     command = ' '.join(['docker', 'run', '--privileged', '-i', '-t', image_location, '/bin/bash'])
     process = subprocess.Popen(command, shell=True)
