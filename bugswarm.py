@@ -30,12 +30,18 @@ def run(image_tag):
 
 def _docker_run(image_tag):
     image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
-    command = ' '.join(['sudo', 'docker', 'run', '--privileged', '-i', '-t', image_location, '/bin/bash'])
+    args = ['docker', 'run', '--privileged', '-i', '-t', image_location, '/bin/bash']
+    # Try the docker command without sudo.
+    command = ' '.join(args)
     process = subprocess.Popen(command, shell=True)
-    stdout = process.communicate()[0]
-    result = stdout.decode('utf-8').strip() if stdout else None
-    returncode = process.returncode
-    return result, returncode
+    if process.returncode != 0:
+        # The non-sudo command failed, so try again with sudo.
+        sudo_command = ' '.join(['sudo'] + args)
+        sudo_process = subprocess.Popen(sudo_command, shell=True)
+        if sudo_process.returncode != 0:
+            # Something went wrong. Return failure.
+            return False
+    return True
 
 
 # def _get_artifact_image_tag(artifact_id):
