@@ -2,8 +2,6 @@ import click
 import pprint
 import subprocess
 
-# from pymongo import MongoClient
-
 DOCKER_HUB_ARTIFACT_USER = 'yclliu'
 DOCKER_HUB_ARTIFACT_REPO = 'artifacts'
 
