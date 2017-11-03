@@ -38,7 +38,8 @@ def _docker_run(image_tag):
         # The non-sudo command failed, so try again with sudo.
         sudo_command = ' '.join(['sudo'] + args)
         sudo_process = subprocess.Popen(sudo_command, shell=True)
-        if sudo_process.returncode != 0:
+        # sudo_process.wait()
+        if sudo_process.wait() != 0:
             # Something went wrong. Return failure.
             return False
     return True
