@@ -24,8 +24,9 @@ A command line client to interface with the [BugSwarm](https://bugswarm.github.i
     ```
 
 ### Uninstallation
-
-- `pip3 uninstall bugswarm`
+```
+$ pip3 uninstall bugswarm
+```
 
 ### Usage
 At this time, two commands are available.
