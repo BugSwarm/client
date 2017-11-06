@@ -44,7 +44,6 @@ def _docker_run(image_tag):
         log.info('Docker is requiring sudo.')
         sudo_command = ' '.join(['sudo'] + args)
         sudo_process = subprocess.Popen(sudo_command, shell=True, stderr=subprocess.DEVNULL)
-        # sudo_process.wait()
         if sudo_process.wait() != 0:
             # Something went wrong. Return failure.
             return False
