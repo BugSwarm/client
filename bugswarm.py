@@ -40,5 +40,9 @@ def _docker_run(image_tag):
     log.info('Docker requires sudo.')
     process = subprocess.Popen(command, shell=True)
     _ = process.communicate()
+    # Fallback if the Docker process does not terminate correctly.
+    if process.poll() is None:
+        print('HERE 123!!!')
+        process.kill()
     print('HERE!!!')
     return process.returncode == 0
