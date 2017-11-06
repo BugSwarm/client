@@ -20,7 +20,7 @@ A command line client to interface with the [BugSwarm](https://bugswarm.github.i
     ```
 1. Install the tool.
     ```
-    $ pip3 install --editable .
+    $ sudo pip3 install --editable .
     ```
 
 ### Uninstallation
