@@ -3,8 +3,8 @@ import sys
 from distutils.core import setup
 
 
-if sys.version_info < (2, 7):
-    sys.exit('Sorry, Python 2 and earlier is not supported. Please install with Python 3 (using pip3).')
+if sys.version_info[0] < 3:
+    raise Exception('Sorry, Python 2 and earlier is not supported. Please install with Python 3 (using pip3).')
 
 
 setup(
