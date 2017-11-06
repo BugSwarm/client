@@ -20,7 +20,7 @@ A command line client to interface with the [BugSwarm](https://bugswarm.github.i
     ```
 1. Install the tool.
     ```
-    $ pip3 install --editable .
+    $ sudo pip3 install --editable .
     ```
 
 ### Uninstallation
@@ -29,7 +29,6 @@ $ pip3 uninstall bugswarm
 ```
 
 ### Usage
-At this time, two commands are available.
 - Download a Docker image and enter the Docker container associated with an artifact. Choose an image tag from the website (coming soon) or via the [REST API](https://github.com/BugSwarm/database#endpoints).
     ```
     $ bugswarm run --image-tag <image_tag>
@@ -37,4 +36,8 @@ At this time, two commands are available.
 - Show metadata for an artifact.
     ```
     $ bugswarm show --image-tag <image_tag>
+    ```
+- Show usage text.
+    ```
+    $ bugswarm --help
     ```
