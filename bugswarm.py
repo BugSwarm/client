@@ -41,9 +41,5 @@ def _docker_run(image_tag):
     # process = subprocess.Popen(command, shell=True)
     process = subprocess.Popen(args)
     _ = process.communicate()
-    # Fallback if the Docker process does not terminate correctly.
-    if process.poll() is None:
-        print('HERE 123!!!')
-        process.kill()
     print('HERE!!!')
     return process.returncode == 0
