@@ -40,4 +40,5 @@ def _docker_run(image_tag):
     log.info('Docker requires sudo.')
     process = subprocess.Popen(command, shell=True)
     _ = process.communicate()
+    print('HERE!!!')
     return process.returncode == 0
