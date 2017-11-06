@@ -35,16 +35,8 @@ def show(image_tag):
 
 def _docker_run(image_tag):
     image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
-    args = ['docker', 'run', '--privileged', '-i', '-t', image_location, '/bin/bash']
-    # Try the docker command without sudo.
+    args = ['sudo', 'docker', 'run', '--privileged', '-i', '-t', image_location, '/bin/bash']
     command = ' '.join(args)
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    if process.returncode != 0:
-        # The non-sudo command failed, so try again with sudo.
-        log.info('Docker is requiring sudo.')
-        sudo_command = ' '.join(['sudo'] + args)
-        sudo_process = subprocess.Popen(sudo_command, shell=True)
-        if sudo_process.wait() != 0:
-            # Something went wrong. Return failure.
-            return False
-    return True
+    log.info('Docker requires sudo.')
+    process = subprocess.Popen(command, shell=True)
+    return process.wait() == 0
