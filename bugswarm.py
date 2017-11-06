@@ -38,11 +38,12 @@ def _docker_run(image_tag):
     args = ['docker', 'run', '--privileged', '-i', '-t', image_location, '/bin/bash']
     # Try the docker command without sudo.
     command = ' '.join(args)
-    process = subprocess.Popen(command, shell=True)
+    process = subprocess.Popen(command, shell=True, stderr=subprocess.DEVNULL)
     if process.returncode != 0:
         # The non-sudo command failed, so try again with sudo.
+        log.info('Docker is requiring sudo.')
         sudo_command = ' '.join(['sudo'] + args)
-        sudo_process = subprocess.Popen(sudo_command, shell=True)
+        sudo_process = subprocess.Popen(sudo_command, shell=True, stderr=subprocess.DEVNULL)
         # sudo_process.wait()
         if sudo_process.wait() != 0:
             # Something went wrong. Return failure.
