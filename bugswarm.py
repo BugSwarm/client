@@ -30,8 +30,17 @@ def cli():
 @cli.command()
 @click.option('--image-tag', required=True, type=str)
 def run(image_tag):
-    click.echo('Downloading and entering image with tag ' + image_tag + '.')
+    log.info('Downloading and entering image with tag', image_tag + '.')
     _docker_run(image_tag)
+
+
+@cli.command()
+@click.option('--image-tag', required=True, type=str)
+def show(image_tag):
+    log.info('Showing metadata for artifact with image tag', image_tag + '.')
+    response = bugswarmapi.find_artifact(image_tag)
+    artifact = response.json()
+    log.info(pprint.pformat(artifact, indent=2))
 
 
 def _docker_run(image_tag):
