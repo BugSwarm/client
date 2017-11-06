@@ -41,5 +41,4 @@ def _docker_run(image_tag):
     # process = subprocess.Popen(command, shell=True)
     process = subprocess.Popen(args)
     _ = process.communicate()
-    print('HERE!!!')
     return process.returncode == 0
