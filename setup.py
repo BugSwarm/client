@@ -7,6 +7,7 @@ setup(
     py_modules=['bugswarm'],
     install_requires=[
         'Click==6.7',
+        'requests==2.18.4',
     ],
     entry_points='''
         [console_scripts]

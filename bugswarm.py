@@ -1,6 +1,10 @@
-import click
 import pprint
 import subprocess
+
+import click
+
+from client import bugswarm_api_wrapper as bugswarmapi
+from client import log
 
 DOCKER_HUB_ARTIFACT_USER = 'yclliu'
 DOCKER_HUB_ARTIFACT_REPO = 'artifacts'
