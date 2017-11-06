@@ -17,16 +17,6 @@ def cli():
     log.config_logging(getattr(logging, 'INFO', None), None)
 
 
-# @cli.command()
-# @click.option('--artifact-id', required=True)
-# def run(artifact_id):
-#     click.echo('run called and passed artifact_id = ' + artifact_id)
-#     click.echo('Downloading and entering the image with artifact_id ' + artifact_id)
-#     # image_tag = _get_artifact_image_tag(artifact_id)
-#     image_tag = ''
-#     _docker_run(image_tag)
-
-
 @cli.command()
 @click.option('--image-tag', required=True, type=str)
 def run(image_tag):
