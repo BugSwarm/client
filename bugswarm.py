@@ -12,7 +12,8 @@ DOCKER_HUB_ARTIFACT_REPO = 'artifacts'
 
 @click.group()
 def cli():
-    pass
+    # Configure logging.
+    log.config_logging(getattr(logging, 'INFO', None), None)
 
 
 # @cli.command()
