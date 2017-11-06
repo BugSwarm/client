@@ -48,12 +48,3 @@ def _docker_run(image_tag):
             # Something went wrong. Return failure.
             return False
     return True
-
-
-# def _get_artifact_image_tag(artifact_id):
-#     client = MongoClient('mongodb://127.0.0.1:3001/meteor')
-#     db = client.meteor
-#     coll = db['artifacts']
-#     cursor = coll.find({'aid': artifact_id})
-#     pprint.pprint(cursor)
-#     return cursor
