@@ -37,7 +37,7 @@ def _docker_run(image_tag):
     image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
     args = ['docker', 'run', '--privileged', '-i', '-t', image_location, '/bin/bash']
     # Try the docker command without sudo.
-    command = ' '.join(args)    
+    command = ' '.join(args)
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     if process.returncode != 0:
         # The non-sudo command failed, so try again with sudo.
