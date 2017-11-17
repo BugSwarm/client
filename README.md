@@ -29,7 +29,7 @@ $ pip3 uninstall bugswarm
 ```
 
 ### Usage
-- Download a Docker image and enter the Docker container associated with an artifact. Choose an image tag from the website (coming soon) or via the [REST API](https://github.com/BugSwarm/database#endpoints).
+- Download a Docker image and enter the Docker container associated with an artifact. Choose an image tag from the website (coming soon) or via the [REST API](https://github.com/BugSwarm/database#api-endpoints).
     ```
     $ bugswarm run --image-tag <image_tag>
     ```
