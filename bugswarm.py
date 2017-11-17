@@ -20,7 +20,7 @@ def cli():
 @cli.command()
 @click.option('--image-tag', required=True, type=str)
 def run(image_tag):
-    log.info('Downloading and entering image with tag', image_tag + '.')
+    log.info('Downloading image with tag ' + image_tag + ' and entering container.')
     _docker_run(image_tag)
 
 
