@@ -22,9 +22,9 @@ def cli():
 @click.option('--script', type=click.Path(file_okay=True, path_type=str))
 def run(image_tag, script):
     if script:
-        log.info('Downloading image with tag ' + image_tag + ' and executing ' + script + 'in the container.')
+        log.info('Downloading image with tag', image_tag, 'and executing', script, 'in the container.')
     else:
-        log.info('Downloading image with tag ' + image_tag + ' and entering container.')
+        log.info('Downloading image with tag', image_tag, 'and entering container.')
     _docker_run(image_tag, script)
 
 
