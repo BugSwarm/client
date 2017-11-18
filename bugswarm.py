@@ -42,7 +42,7 @@ def show(image_tag):
 def _docker_run(image_tag, script):
     if script is None:
         script = '/bin/bash'
-    log.info('Docker requires sudo.')
+    log.info('Note that Docker requires sudo.')
     image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
     args = ['sudo', 'docker', 'run', '--privileged', '-i', '-t', image_location, script]
     process = subprocess.Popen(args)
