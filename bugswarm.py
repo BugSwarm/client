@@ -19,9 +19,13 @@ def cli():
 
 @cli.command()
 @click.option('--image-tag', required=True, type=str)
-def run(image_tag):
-    log.info('Downloading image with tag ' + image_tag + ' and entering container.')
-    _docker_run(image_tag)
+@click.option('--script', type=click.Path(exists=True, file_okay=True, path_type=str))
+def run(image_tag, script):
+    if script:
+        log.info('Downloading image with tag ' + image_tag + ' and executing ' + script + 'in the container.')
+    else:
+        log.info('Downloading image with tag ' + image_tag + ' and entering container.')
+    _docker_run(image_tag, script)
 
 
 @cli.command()
@@ -33,10 +37,14 @@ def show(image_tag):
     log.info(pprint.pformat(artifact, indent=2))
 
 
-def _docker_run(image_tag):
+# By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
+# The executed script can be changed by passing the script argument.
+def _docker_run(image_tag, script):
+    if script is None:
+        script = '/bin/bash'
     log.info('Docker requires sudo.')
     image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
-    args = ['sudo', 'docker', 'run', '--privileged', '-i', '-t', image_location, '/bin/bash']
+    args = ['sudo', 'docker', 'run', '--privileged', '-i', '-t', image_location, script]
     process = subprocess.Popen(args)
     _ = process.communicate()
     return process.returncode == 0
