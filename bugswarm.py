@@ -19,7 +19,7 @@ def cli():
 
 @cli.command()
 @click.option('--image-tag', required=True, type=str)
-@click.option('--script', type=click.Path(exists=True, file_okay=True, path_type=str))
+@click.option('--script', type=click.Path(file_okay=True, path_type=str))
 def run(image_tag, script):
     if script:
         log.info('Downloading image with tag ' + image_tag + ' and executing ' + script + 'in the container.')
