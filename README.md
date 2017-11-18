@@ -29,9 +29,9 @@ $ pip3 uninstall bugswarm
 ```
 
 ### Usage
-- Download a Docker image and enter the Docker container associated with an artifact. Choose an image tag from the website (coming soon) or via the [REST API](https://github.com/BugSwarm/database#api-endpoints).
+- Download a Docker image and enter the Docker container associated with an artifact. Choose an image tag from [the website](http://bugswarm.org/artifact-browser) or via the [REST API](https://github.com/BugSwarm/database#api-endpoints). The script argument is a path to an executable in the container's filesystem that will be executed inside the container.
     ```
-    $ bugswarm run --image-tag <image_tag>
+    $ bugswarm run --image-tag <image_tag> [--script <script>]
     ```
 - Show metadata for an artifact.
     ```
