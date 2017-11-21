@@ -4,8 +4,8 @@ import subprocess
 
 import click
 
-from client import bugswarm_api_wrapper as bugswarmapi
-from client import log
+from bugswarmcommon import log
+from bugswarmcommon import rest_api as bugswarmapi
 
 DOCKER_HUB_ARTIFACT_USER = 'yclliu'
 DOCKER_HUB_ARTIFACT_REPO = 'artifacts'
