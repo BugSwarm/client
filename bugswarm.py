@@ -29,8 +29,9 @@ def _validate_shared_dir(ctx, param, value):
     #
     # However, we can check that host_dir is an absolute path to an existing directory on the host machine.
     if not host_dir or not os.path.isdir(host_dir) or not container_dir:
-       raise click.BadParameter('The volume binding must be a colon-separated pair of absolute paths to a directory on '
-                                'the host and the container, respectively. (e.g. /home/username/bugswarm-sandbox:/)')
+        raise click.BadParameter('The volume binding must be a colon-separated pair of absolute paths to a directory '
+                                 'on the host and the container, respectively. '
+                                 '(e.g. /home/username/bugswarm-sandbox:/home)')
     return host_dir, container_dir
 
 
