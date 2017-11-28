@@ -21,6 +21,8 @@ def _validate_volume_binding(ctx, param, value):
         if value is None:
             return value
         host_dir, container_dir = map(int, value.split(':', 1))
+        print('host_dir = ' + host_dir)
+        print('container_dir = ' + container_dir)
         # No validation for container_dir. Pass that responsibility to docker; it will complain if necessary.
         # Check that host_dir is an existing directory on the host machine.
         if not os.path.isdir(host_dir):
