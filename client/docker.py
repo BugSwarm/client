@@ -46,7 +46,7 @@ def docker_run(image_tag, script=None, volume_binding=None):
     # Now try to run the image.
     log.info('Note that Docker requires sudo.')
     image_location = _image_location(image_tag)
-    volume_args = ['-v', volume_binding] if volume_binding else []
+    volume_args = ['-v', ':'.join([host_dir, container_dir])] if volume_binding else []
     args = ['sudo', 'docker', 'run', '--privileged'] + volume_args + ['-i', '-t', image_location, script]
     process = subprocess.Popen(args)
     _ = process.communicate()
