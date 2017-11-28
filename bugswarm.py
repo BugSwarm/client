@@ -40,8 +40,9 @@ def show(image_tag):
 def _docker_run(image_tag, script=None):
     assert image_tag
     assert isinstance(image_tag, str)
-    assert isinstance(script, str)
     script = script or '/bin/bash'
+    assert script
+    assert isinstance(script, str)
 
     # First, try to pull the image.
     ok = _docker_pull(image_tag)
