@@ -1,4 +1,5 @@
 import logging
+import os
 import pprint
 
 import click
@@ -18,6 +19,10 @@ def cli():
 def _validate_volume_binding(ctx, param, value):
     try:
         host_dir, container_dir = map(int, value.split(':', 1))
+        # No validation for container_dir. Pass that responsibility to docker; it will complain if necessary.
+        # Check that host_dir is an existing directory on the host machine.
+        if not os.path.isdir(host_dir):
+            raise ValueError
         return host_dir, container_dir
     except ValueError:
         raise click.BadParameter('The volume binding must be in the format <host directory>:<container directory>.')
@@ -26,7 +31,7 @@ def _validate_volume_binding(ctx, param, value):
 @cli.command()
 @click.option('--image-tag', required=True, type=str)
 @click.option('--script', type=click.Path(file_okay=True, path_type=str))
-@click.option('--volume-binding', callback=_validate_volume_binding, type=str)
+@click.option('--volume-binding', callback=_validate_volume_binding, default=None, type=str)
 def run(image_tag, script, volume_binding):
     docker.docker_run(image_tag, script, volume_binding)
 
