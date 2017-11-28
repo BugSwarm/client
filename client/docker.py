@@ -26,25 +26,18 @@ def docker_run(image_tag, script=None, shared_dir=None):
     if not ok:
         return False
 
-    # Communicate what is happening next to the user. The output depends on the passed script and shared_dir
-    # parameters. If we start accepting more parameters, this logic will become unruly and will need to be refactored.
-    default_script = script == SCRIPT_DEFAULT
+    # Communicate what is happening next to the user. The output depends on the passed script and shared_dir parameters.
     default_shared_dir = host_dir is None and container_dir is None
-    if default_shared_dir and default_script:
-        log.info('Entering container.')
-    elif default_shared_dir and not default_script:
-        log.info('Executing', script, 'in the container.')
-    elif not default_shared_dir and default_script:
-        log.info('Binding host directory', host_dir,
-                 'to container directory', container_dir,
-                 'and entering container.')
-    elif default_shared_dir and not default_script:
-        log.info('Binding host directory', host_dir,
-                 'to container directory', container_dir,
-                 'and executing', script, 'in the container.')
+    if not default_shared_dir:
+        log.info('Binding host directory', host_dir, 'to container directory', container_dir)
+
+    default_script = script == SCRIPT_DEFAULT
+    if not default_script:
+        log.info('Entering the container and executing', script + '.')
+    else:
+        log.info('Entering the container.')
 
     # Now try to run the image.
-    log.info('Note that Docker requires sudo.')
     image_location = _image_location(image_tag)
     volume_args = ['-v', ':'.join([host_dir, container_dir])] if shared_dir else []
     args = ['sudo', 'docker', 'run', '--privileged'] + volume_args + ['-i', '-t', image_location, script]

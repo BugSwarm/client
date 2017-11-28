@@ -15,6 +15,7 @@ from client import docker
 def cli():
     # Configure logging.
     log.config_logging(getattr(logging, 'INFO', None), None)
+    log.info('Note that Docker requires sudo.')
 
 
 def _validate_shared_dir(ctx, param, value):
