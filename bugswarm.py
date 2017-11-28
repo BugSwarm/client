@@ -24,7 +24,7 @@ def _validate_volume_binding(ctx, param, value):
         if not os.path.isdir(host_dir):
             raise ValueError
         return host_dir, container_dir
-    except ValueError:
+    except (ValueError, AttributeError):
         raise click.BadParameter('The volume binding must be in the format <host directory>:<container directory>.')
 
 
