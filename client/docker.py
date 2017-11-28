@@ -6,7 +6,7 @@ from bugswarmcommon.credentials import DOCKER_HUB_REPO
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def docker_run(image_tag, script=None, volume_binding=None):
+def docker_run(image_tag, script=None, shared_dir=None):
     assert isinstance(image_tag, str) and not image_tag.isspace()
 
     SCRIPT_DEFAULT = '/bin/bash'
@@ -14,10 +14,10 @@ def docker_run(image_tag, script=None, volume_binding=None):
     assert isinstance(script, str) and not script.isspace()
 
     host_dir, container_dir = None, None
-    if volume_binding is not None:
-        assert isinstance(volume_binding, tuple)
-        assert len(volume_binding) == 2
-        host_dir, container_dir = volume_binding
+    if shared_dir is not None:
+        assert isinstance(shared_dir, tuple)
+        assert len(shared_dir) == 2
+        host_dir, container_dir = shared_dir
         assert isinstance(host_dir, str) and not host_dir.isspace()
         assert isinstance(container_dir, str) and not container_dir.isspace()
 
@@ -26,19 +26,19 @@ def docker_run(image_tag, script=None, volume_binding=None):
     if not ok:
         return False
 
-    # Communicate what is happening next to the user. The output depends on the passed script and volume_binding
+    # Communicate what is happening next to the user. The output depends on the passed script and shared_dir
     # parameters. If we start accepting more parameters, this logic will become unruly and will need to be refactored.
     default_script = script == SCRIPT_DEFAULT
-    default_volume_binding = host_dir is None and container_dir is None
-    if default_volume_binding and default_script:
+    default_shared_dir = host_dir is None and container_dir is None
+    if default_shared_dir and default_script:
         log.info('Entering container.')
-    elif default_volume_binding and not default_script:
+    elif default_shared_dir and not default_script:
         log.info('Executing', script, 'in the container.')
-    elif not default_volume_binding and default_script:
+    elif not default_shared_dir and default_script:
         log.info('Binding host directory', host_dir,
                  'to container directory', container_dir,
                  'and entering container.')
-    elif default_volume_binding and not default_script:
+    elif default_shared_dir and not default_script:
         log.info('Binding host directory', host_dir,
                  'to container directory', container_dir,
                  'and executing', script, 'in the container.')
@@ -46,7 +46,7 @@ def docker_run(image_tag, script=None, volume_binding=None):
     # Now try to run the image.
     log.info('Note that Docker requires sudo.')
     image_location = _image_location(image_tag)
-    volume_args = ['-v', ':'.join([host_dir, container_dir])] if volume_binding else []
+    volume_args = ['-v', ':'.join([host_dir, container_dir])] if shared_dir else []
     args = ['sudo', 'docker', 'run', '--privileged'] + volume_args + ['-i', '-t', image_location, script]
     process = subprocess.Popen(args)
     _ = process.communicate()

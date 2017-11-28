@@ -16,7 +16,7 @@ def cli():
     log.config_logging(getattr(logging, 'INFO', None), None)
 
 
-def _validate_volume_binding(ctx, param, value):
+def _validate_shared_dir(ctx, param, value):
     if value is None:
         return value
 
@@ -36,9 +36,9 @@ def _validate_volume_binding(ctx, param, value):
 @cli.command()
 @click.option('--image-tag', required=True, type=str)
 @click.option('--script', type=click.Path(file_okay=True, path_type=str))
-@click.option('--volume-binding', callback=_validate_volume_binding, default=None, type=str)
-def run(image_tag, script, volume_binding):
-    docker.docker_run(image_tag, script, volume_binding)
+@click.option('--shared-dir', callback=_validate_shared_dir, default=None, type=str)
+def run(image_tag, script, shared_dir):
+    docker.docker_run(image_tag, script, shared_dir)
 
 
 @cli.command()
