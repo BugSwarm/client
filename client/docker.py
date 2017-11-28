@@ -13,30 +13,35 @@ def docker_run(image_tag, script=None, volume_binding=None):
     script = script or SCRIPT_DEFAULT
     assert isinstance(script, str) and not script.isspace()
 
+    host_dir, container_dir = None, None
     if volume_binding is not None:
-        assert isinstance(volume_binding, str) and not volume_binding.isspace()
+        assert isinstance(volume_binding, tuple)
+        assert len(volume_binding) == 2
+        host_dir, container_dir = volume_binding
+        assert isinstance(host_dir, str) and not host_dir.isspace()
+        assert isinstance(container_dir, str) and not container_dir.isspace()
 
     # First, try to pull the image.
     ok = docker_pull(image_tag)
     if not ok:
         return False
 
-    host_dir, container_dir = map(int, volume_binding.split(':', 1))
-    assert isinstance(host_dir, str) and not host_dir.isspace()
-    assert isinstance(container_dir, str) and not container_dir.isspace()
-
-    if volume_binding and script != SCRIPT_DEFAULT:
-        log.info('Binding host directory', host_dir,
-                 'to container directory', container_dir,
-                 'and executing', script, 'in the container.')
-    elif volume_binding and script == SCRIPT_DEFAULT:
+    # Communicate what is happening next to the user. The output depends on the passed script and volume_binding
+    # parameters. If we start accepting more parameters, this logic will become unruly and will need to be refactored.
+    default_script = script == SCRIPT_DEFAULT
+    default_volume_binding = host_dir is None and container_dir is None
+    if default_volume_binding and default_script:
+        log.info('Entering container.')
+    elif default_volume_binding and not default_script:
+        log.info('Executing', script, 'in the container.')
+    elif not default_volume_binding and default_script:
         log.info('Binding host directory', host_dir,
                  'to container directory', container_dir,
                  'and entering container.')
-    elif not volume_binding and script != SCRIPT_DEFAULT:
-        log.info('Executing', script, 'in the container.')
-    else:
-        log.info('Entering container.')
+    elif default_volume_binding and not default_script:
+        log.info('Binding host directory', host_dir,
+                 'to container directory', container_dir,
+                 'and executing', script, 'in the container.')
 
     # Now try to run the image.
     log.info('Note that Docker requires sudo.')
