@@ -28,7 +28,6 @@ def docker_run(image_tag, script=None, sandbox=None):
     if not ok:
         return False
 
-    # Communicate progress to the user.
     if using_sandbox:
         # Confirm that the user wants to use the passed sandbox.
         if not click.confirm('\n'
