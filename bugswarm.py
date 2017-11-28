@@ -40,6 +40,8 @@ def show(image_tag):
 def _docker_run(image_tag, script='/bin/bash'):
     assert image_tag
     assert isinstance(image_tag, str)
+    print('script[' + script + ']')
+    exit()
     assert script
     assert isinstance(script, str)
 
