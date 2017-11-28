@@ -37,13 +37,11 @@ def show(image_tag):
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def _docker_run(image_tag, script='/bin/bash'):
+def _docker_run(image_tag, script=None):
     assert image_tag
     assert isinstance(image_tag, str)
-    print('script[' + script + ']')
-    exit()
-    assert script
     assert isinstance(script, str)
+    script = script or '/bin/bash'
 
     # First, try to pull the image.
     ok = _docker_pull(image_tag)
