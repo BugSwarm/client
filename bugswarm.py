@@ -20,6 +20,7 @@ def _validate_volume_binding(ctx, param, value):
     try:
         if value is None:
             return value
+        click.echo('here')
         host_dir, container_dir = map(int, value.split(':', 1))
         click.echo('host_dir = ' + host_dir)
         click.echo('container_dir = ' + container_dir)
