@@ -17,17 +17,20 @@ def cli():
 
 
 def _validate_volume_binding(ctx, param, value):
-    try:
-        if value is None:
-            return value
-        host_dir, container_dir = value.split(':', 1)
-        # No validation for container_dir. Pass that responsibility to docker; it will complain if necessary.
-        # Check that host_dir is an existing directory on the host machine.
-        if not os.path.isdir(host_dir):
-            raise ValueError
-        return host_dir, container_dir
-    except (ValueError, AttributeError):
-        raise click.BadParameter('The volume binding must be in the format <host directory>:<container directory>.')
+    if value is None:
+        return value
+
+    host_dir, container_dir = value.split(':', 1)
+
+    # Since we do not know the the filesystem of the container, we cannot validate container_dir. We cannot even check
+    # if it is an absolute path because that would require that the container is the same platform as the host, which is
+    # too strong of an assumption. Instead, we pass validation responsibility to docker; it will complain if necessary.
+    #
+    # However, we can check that host_dir is an absolute path to an existing directory on the host machine.
+    if not host_dir or not os.path.isdir(host_dir) or not container_dir:
+       raise click.BadParameter('The volume binding must be a colon-separated pair of absolute paths to a directory on '
+                                'the host and the container, respectively. (e.g. /home/username/bugswarm-sandbox:/)')
+    return host_dir, container_dir
 
 
 @cli.command()
