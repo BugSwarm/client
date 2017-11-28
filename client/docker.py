@@ -58,7 +58,7 @@ def docker_pull(image_tag):
     assert isinstance(image_tag, str)
 
     image_location = _image_location(image_tag)
-    args = ['docker', 'pull', image_location]
+    args = ['sudo', 'docker', 'pull', image_location]
     process = subprocess.Popen(args)
     _ = process.communicate()
     if process.returncode != 0:

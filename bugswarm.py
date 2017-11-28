@@ -11,6 +11,7 @@ from client import docker
 
 
 @click.group()
+@click.version_option(message='BugSwarm Client, version %(version)s')
 def cli():
     # Configure logging.
     log.config_logging(getattr(logging, 'INFO', None), None)
