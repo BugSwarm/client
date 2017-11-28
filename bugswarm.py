@@ -6,9 +6,7 @@ import click
 
 from bugswarmcommon import log
 from bugswarmcommon import rest_api as bugswarmapi
-
-DOCKER_HUB_ARTIFACT_USER = 'yclliu'
-DOCKER_HUB_ARTIFACT_REPO = 'artifacts'
+from bugswarmcommon.credentials import DOCKER_HUB_REPO
 
 
 @click.group()
@@ -39,19 +37,26 @@ def show(image_tag):
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def _docker_run(image_tag, script=None):
+def _docker_run(image_tag, script='/bin/bash'):
     assert image_tag
     assert isinstance(image_tag, str)
     assert script
     assert isinstance(script, str)
 
-    script = script or '/bin/bash'
+    # First, try to pull the image.
+    ok = _docker_pull(image_tag)
+    if not ok:
+        return False
 
+    # Now try to run the image.
     log.info('Note that Docker requires sudo.')
-    image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
+    image_location = _image_location(image_tag)
     args = ['sudo', 'docker', 'run', '--privileged', '-i', '-t', image_location, script]
     process = subprocess.Popen(args)
     _ = process.communicate()
+    if process.returncode != 0:
+        log.error('Could not run the image', image_location + '.')
+        return False
     return process.returncode == 0
 
 
@@ -59,8 +64,16 @@ def _docker_pull(image_tag):
     assert image_tag
     assert isinstance(image_tag, str)
 
-    image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
+    image_location = _image_location(image_tag)
     args = ['docker', 'pull', image_location]
     process = subprocess.Popen(args)
     _ = process.communicate()
+    if process.returncode != 0:
+        log.error('Could not download the image', image_location, 'from Docker Hub.')
     return process.returncode == 0
+
+
+def _image_location(image_tag):
+    assert image_tag
+    assert isinstance(image_tag, str)
+    return DOCKER_HUB_REPO + ':' + image_tag
