@@ -39,11 +39,14 @@ def show(image_tag):
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-    if script is None:
-        script = '/bin/bash'
 def _docker_run(image_tag, script=None):
+    assert image_tag
     assert isinstance(image_tag, str)
+    assert script
     assert isinstance(script, str)
+
+    script = script or '/bin/bash'
+
     log.info('Note that Docker requires sudo.')
     image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
     args = ['sudo', 'docker', 'run', '--privileged', '-i', '-t', image_location, script]
@@ -53,7 +56,9 @@ def _docker_run(image_tag, script=None):
 
 
 def _docker_pull(image_tag):
+    assert image_tag
     assert isinstance(image_tag, str)
+
     image_location = DOCKER_HUB_ARTIFACT_USER + '/' + DOCKER_HUB_ARTIFACT_REPO + ':' + image_tag
     args = ['docker', 'pull', image_location]
     process = subprocess.Popen(args)
