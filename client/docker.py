@@ -58,6 +58,10 @@ def docker_pull(image_tag):
     assert image_tag
     assert isinstance(image_tag, str)
 
+    # Exit early if the image already exists locally.
+    if _image_exists_locally(image_tag):
+        return True
+
     image_location = _image_location(image_tag)
     args = ['sudo', 'docker', 'pull', image_location]
     process = subprocess.Popen(args)
@@ -67,6 +71,23 @@ def docker_pull(image_tag):
     else:
         log.info('Downloaded the image', image_location + '.')
     return process.returncode == 0
+
+
+# Returns True if the image already exists locally.
+def _docker_image_inspect(image_tag):
+    image_location = _image_location(image_tag)
+    args = ['sudo', 'docker', 'image', 'inspect', image_location]
+    process = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    _ = process.communicate()
+    # For a non-existent image, docker image inspect has a non-zero exit status.
+    if process.returncode == 0:
+        log.info('The image', image_location, 'already exists locally and is up to date.')
+    return process.returncode == 0
+
+
+# Returns True if the image already exists locally.
+def _image_exists_locally(image_tag):
+    return _docker_image_inspect(image_tag)
 
 
 def _image_location(image_tag):
