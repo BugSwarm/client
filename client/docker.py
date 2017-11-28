@@ -50,9 +50,6 @@ def docker_run(image_tag, script=None, volume_binding=None):
     args = ['sudo', 'docker', 'run', '--privileged'] + volume_args + ['-i', '-t', image_location, script]
     process = subprocess.Popen(args)
     _ = process.communicate()
-    if process.returncode != 0:
-        log.error('Could not run the image', image_location + '.')
-        return False
     return process.returncode == 0
 
 
