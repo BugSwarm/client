@@ -12,7 +12,7 @@ CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def docker_run(image_tag, script=None, sandbox=None, use_heredoc=False):
+def docker_run(image_tag, script=None, sandbox=None, pipe_stdin=False):
     assert isinstance(image_tag, str) and not image_tag.isspace()
 
     script = script or SCRIPT_DEFAULT
@@ -53,8 +53,8 @@ def docker_run(image_tag, script=None, sandbox=None, use_heredoc=False):
     # Prepare the arguments for the docker run command.
     volume_args = ['-v', '{}:{}'.format(sandbox, container_sandbox)] if using_sandbox else []
     # The -t options must not be used in order to use a heredoc.
-    input_args = ['-i'] if use_heredoc else ['-i', '-t']
-    subprocess_stdin = sys.stdin if use_heredoc else None
+    input_args = ['-i'] if pipe_stdin else ['-i', '-t']
+    subprocess_stdin = sys.stdin if pipe_stdin else None
     # If we're using a shared directory, we need to modify the start script to change the permissions of the shared
     # directory on the container side. However, this will also change the permissions on the host side.
     script_args = [script]
