@@ -48,9 +48,11 @@ def docker_run(image_tag, script=None, sandbox=None, use_heredoc=False):
     else:
         log.info('Entering the container.')
 
-    # Prepare the arguments for the docker run command.
     image_location = _image_location(image_tag)
+
+    # Prepare the arguments for the docker run command.
     volume_args = ['-v', '{}:{}'.format(sandbox, container_sandbox)] if using_sandbox else []
+    # The -t options must not be used in order to use a heredoc.
     input_args = ['-i'] if use_heredoc else ['-i', '-t']
     subprocess_stdin = sys.stdin if use_heredoc else None
     # If we're using a shared directory, we need to modify the start script to change the permissions of the shared
