@@ -1,42 +1,32 @@
+import os
 import subprocess
 import sys
-
-import click
 
 from bugswarmcommon import log
 from bugswarmcommon.credentials import DOCKER_HUB_REPO
 
 SCRIPT_DEFAULT = '/bin/bash'
+HOST_SANDBOX_DEFAULT = '~/bugswarm-sandbox'
 CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
 
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def docker_run(image_tag, sandbox=None, pipe_stdin=False):
+def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False):
     assert isinstance(image_tag, str) and not image_tag.isspace()
-
-    using_sandbox = False
-    if sandbox is not None:
-        assert isinstance(sandbox, str) and not sandbox.isspace()
-        using_sandbox = True
+    assert isinstance(use_sandbox, bool)
+    assert isinstance(use_pipe_stdin, bool)
 
     # First, try to pull the image.
     ok = docker_pull(image_tag)
     if not ok:
         return False
 
-    # if using_sandbox:
-        # Confirm that the user wants to use the passed sandbox.
-        # if not click.confirm('\n'
-        #                      'Due to a limitation of Docker, your sandbox directory ({}) and everything it contains '
-        #                      'will become readable, writable, and executable by everyone.\n'
-        #                      'Are you sure you want to continue?'.format(sandbox)):
-        #     return False
-
     # Communicate progress to the user.
+    host_sandbox = _default_host_sandbox()
     container_sandbox = CONTAINER_SANDBOX_DEFAULT
-    if using_sandbox:
-        log.info('Binding host sandbox', sandbox, 'to container directory', container_sandbox)
+    if use_sandbox:
+        log.info('Binding host sandbox', host_sandbox, 'to container directory', container_sandbox)
 
     # Communicate progress to the user.
     log.info('Entering the container.')
@@ -44,14 +34,14 @@ def docker_run(image_tag, sandbox=None, pipe_stdin=False):
     image_location = _image_location(image_tag)
 
     # Prepare the arguments for the docker run command.
-    volume_args = ['-v', '{}:{}'.format(sandbox, container_sandbox)] if using_sandbox else []
-    # The -t options must not be used in order to use a heredoc.
-    input_args = ['-i'] if pipe_stdin else ['-i', '-t']
-    subprocess_stdin = sys.stdin if pipe_stdin else None
+    volume_args = ['-v', '{}:{}'.format(host_sandbox, container_sandbox)] if use_sandbox else []
+    # The -t option must not be used in order to use a heredoc.
+    input_args = ['-i'] if use_pipe_stdin else ['-i', '-t']
+    subprocess_stdin = sys.stdin if use_pipe_stdin else None
     # If we're using a shared directory, we need to modify the start script to change the permissions of the shared
     # directory on the container side. However, this will also change the permissions on the host side.
     script_args = [SCRIPT_DEFAULT]
-    if using_sandbox:
+    if use_sandbox:
         start_command = 'sudo chmod -R 777 {} && cd {} && umask 000 && cd .. && {}'.format(
             container_sandbox, container_sandbox, SCRIPT_DEFAULT)
         # These arguments represent a command of the following form:
@@ -109,3 +99,7 @@ def _image_location(image_tag):
     assert image_tag
     assert isinstance(image_tag, str)
     return DOCKER_HUB_REPO + ':' + image_tag
+
+
+def _default_host_sandbox():
+    return os.path.expanduser(HOST_SANDBOX_DEFAULT)
