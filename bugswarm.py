@@ -22,9 +22,6 @@ def cli():
 @click.option('--image-tag', required=True,
               type=str,
               help='The artifact image tag.')
-@click.option('--script',
-              type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=str),
-              help='The path to a script, in the container filesystem, to run when the container starts.')
 @click.option('--sandbox',
               type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True, path_type=str),
               help='A path to a directory, in the host filesystem, that will be shared by the host and container.')
@@ -32,9 +29,9 @@ def cli():
               help='If enabled, the contents of stdin are executed in the container. '
                    'This option supports heredocs in shells that support them. '
                    'Disabled by default.')
-def run(image_tag, script, sandbox, pipe_stdin):
+def run(image_tag, sandbox, pipe_stdin):
     """Start an artifact container."""
-    docker.docker_run(image_tag, script, sandbox, pipe_stdin)
+    docker.docker_run(image_tag, sandbox, pipe_stdin)
 
 
 @cli.command()

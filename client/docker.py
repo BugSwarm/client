@@ -12,12 +12,8 @@ CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def docker_run(image_tag, script=None, sandbox=None, pipe_stdin=False):
+def docker_run(image_tag, sandbox=None, pipe_stdin=False):
     assert isinstance(image_tag, str) and not image_tag.isspace()
-
-    script = script or SCRIPT_DEFAULT
-    using_script = script != SCRIPT_DEFAULT
-    assert isinstance(script, str) and not script.isspace()
 
     using_sandbox = False
     if sandbox is not None:
@@ -43,10 +39,7 @@ def docker_run(image_tag, script=None, sandbox=None, pipe_stdin=False):
         log.info('Binding host sandbox', sandbox, 'to container directory', container_sandbox)
 
     # Communicate progress to the user.
-    if using_script:
-        log.info('Entering the container and executing', script + '.')
-    else:
-        log.info('Entering the container.')
+    log.info('Entering the container.')
 
     image_location = _image_location(image_tag)
 
@@ -57,10 +50,10 @@ def docker_run(image_tag, script=None, sandbox=None, pipe_stdin=False):
     subprocess_stdin = sys.stdin if pipe_stdin else None
     # If we're using a shared directory, we need to modify the start script to change the permissions of the shared
     # directory on the container side. However, this will also change the permissions on the host side.
-    script_args = [script]
+    script_args = [SCRIPT_DEFAULT]
     if using_sandbox:
         start_command = 'sudo chmod -R 777 {} && cd {} && umask 000 && cd .. && {}'.format(
-            container_sandbox, container_sandbox, script)
+            container_sandbox, container_sandbox, SCRIPT_DEFAULT)
         # These arguments represent a command of the following form:
         # /bin/bash -c "sudo chmod 777 <container_sandbox> && cd <container_sandbox> && umask 000 && /bin/bash"
         # So bash will execute chmod and umask and then start a new bash shell. From the user's perspective, the chmod
