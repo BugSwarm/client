@@ -19,9 +19,11 @@ def cli():
 
 
 @cli.command()
-@click.option('--image-tag', required=True, type=str,
+@click.option('--image-tag', required=True,
+              type=str,
               help='The artifact image tag.')
-@click.option('--script', type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=str),
+@click.option('--script',
+              type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=str),
               help='The path to a script, in the container filesystem, to run when the container starts.')
 @click.option('--sandbox',
               type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True, path_type=str),
