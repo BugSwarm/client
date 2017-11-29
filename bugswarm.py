@@ -30,7 +30,7 @@ def cli():
               help='A path to a directory, in the host filesystem, that will be shared by the host and container.')
 def run(image_tag, script, sandbox):
     """Start an artifact container."""
-    docker.docker_run(image_tag, script, sandbox)
+    docker.docker_run(image_tag, script, sandbox, use_heredoc=True)
 
 
 @cli.command()
