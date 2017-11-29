@@ -1,4 +1,5 @@
 import subprocess
+import sys
 
 import click
 
@@ -11,7 +12,7 @@ CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def docker_run(image_tag, script=None, sandbox=None):
+def docker_run(image_tag, script=None, sandbox=None, input_stream=None):
     assert isinstance(image_tag, str) and not image_tag.isspace()
 
     script = script or SCRIPT_DEFAULT
@@ -28,13 +29,13 @@ def docker_run(image_tag, script=None, sandbox=None):
     if not ok:
         return False
 
-    if using_sandbox:
+    # if using_sandbox:
         # Confirm that the user wants to use the passed sandbox.
-        if not click.confirm('\n'
-                             'Due to a limitation of Docker, your sandbox directory ({}) and everything it contains '
-                             'will become readable, writable, and executable by everyone.\n'
-                             'Are you sure you want to continue?'.format(sandbox)):
-            return False
+        # if not click.confirm('\n'
+        #                      'Due to a limitation of Docker, your sandbox directory ({}) and everything it contains '
+        #                      'will become readable, writable, and executable by everyone.\n'
+        #                      'Are you sure you want to continue?'.format(sandbox)):
+        #     return False
 
     # Communicate progress to the user.
     container_sandbox = CONTAINER_SANDBOX_DEFAULT
@@ -47,26 +48,26 @@ def docker_run(image_tag, script=None, sandbox=None):
     else:
         log.info('Entering the container.')
 
-    # Try to run the image.
+    # Prepare the arguments for the docker run command.
     image_location = _image_location(image_tag)
     volume_args = ['-v', '{}:{}'.format(sandbox, container_sandbox)] if using_sandbox else []
-
+    input_args = [] if True else ['-i', '-t']
+    subprocess_stdin = sys.stdin if True else None
     # If we're using a shared directory, we need to modify the start script to change the permissions of the shared
     # directory on the container side. However, this will also change the permissions on the host side.
     script_args = [script]
     if using_sandbox:
         start_command = 'sudo chmod -R 777 {} && cd {} && umask 000 && cd .. && {}'.format(
-            container_sandbox,
-            container_sandbox,
-            script)
+            container_sandbox, container_sandbox, script)
         # These arguments represent a command of the following form:
         # /bin/bash -c "sudo chmod 777 <container_sandbox> && cd <container_sandbox> && umask 000 && /bin/bash"
         # So bash will execute chmod and umask and then start a new bash shell. From the user's perspective, the chmod
         # and umask commands happen transparently. That is, the user only sees the final new bash shell.
         script_args = [SCRIPT_DEFAULT, '-c', start_command]
 
-    args = ['sudo', 'docker', 'run', '--privileged'] + volume_args + ['-i', '-t', image_location] + script_args
-    process = subprocess.Popen(args)
+    # Try to run the image.
+    args = ['sudo', 'docker', 'run', '--privileged'] + volume_args + input_args + [image_location] + script_args
+    process = subprocess.Popen(args, stdin=subprocess_stdin)
     _ = process.communicate()
     return process.returncode == 0
 
