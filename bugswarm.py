@@ -34,7 +34,8 @@ def run(image_tag, script, sandbox):
 
 
 @cli.command()
-@click.option('--image-tag', required=True, type=str,
+@click.option('--image-tag', required=True,
+              type=str,
               help='The artifact image tag.')
 def show(image_tag):
     """Display artifact metadata."""
