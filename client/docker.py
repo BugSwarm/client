@@ -67,7 +67,7 @@ def docker_run(image_tag, script=None, sandbox=None, input_stream=None):
 
     # Try to run the image.
     args = ['sudo', 'docker', 'run', '--privileged'] + volume_args + input_args + [image_location] + script_args
-    process = subprocess.Popen(args, stdin=subprocess_stdin)
+    process = subprocess.Popen(args, shell=True, stdin=subprocess_stdin)
     _ = process.communicate()
     return process.returncode == 0
 
