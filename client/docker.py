@@ -40,8 +40,6 @@ def docker_run(image_tag, script=None, sandbox=None):
     container_sandbox = CONTAINER_SANDBOX_DEFAULT
     if using_sandbox:
         log.info('Binding host sandbox', sandbox, 'to container directory', container_sandbox)
-        # log.info('Binding host sandbox to container directory:',
-        #           sandbox, '(host) <-----> (container)', container_sandbox)
 
     # Communicate progress to the user.
     if using_script:
