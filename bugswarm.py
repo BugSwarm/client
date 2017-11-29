@@ -12,6 +12,7 @@ from client import docker
 @click.group()
 @click.version_option(message='BugSwarm Client, version %(version)s')
 def cli():
+    """A command line interface for the BugSwarm dataset."""
     # Configure logging.
     log.config_logging(getattr(logging, 'INFO', None), None)
     log.info('Note that Docker requires sudo.')
