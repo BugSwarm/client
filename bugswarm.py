@@ -18,17 +18,23 @@ def cli():
 
 
 @cli.command()
-@click.option('--image-tag', required=True, type=str)
-@click.option('--script', type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=str))
+@click.option('--image-tag', required=True, type=str,
+              help='The artifact image tag.')
+@click.option('--script', type=click.Path(exists=False, file_okay=True, dir_okay=False, path_type=str),
+              help='The path to a script, in the container filesystem, to run when the container starts.')
 @click.option('--sandbox',
-              type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True, path_type=str))
+              type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True, path_type=str),
+              help='A path to a directory, in the host filesystem, that will be shared by the host and container.')
 def run(image_tag, script, sandbox):
+    """Start an artifact container."""
     docker.docker_run(image_tag, script, sandbox)
 
 
 @cli.command()
-@click.option('--image-tag', required=True, type=str)
+@click.option('--image-tag', required=True, type=str,
+              help='The artifact image tag.')
 def show(image_tag):
+    """Display artifact metadata."""
     log.info('Showing metadata for artifact with image tag', image_tag + '.')
     response = bugswarmapi.find_artifact(image_tag)
     artifact = response.json()
