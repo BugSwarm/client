@@ -15,7 +15,6 @@ def cli():
     """A command line interface for the BugSwarm dataset."""
     # Configure logging.
     log.config_logging(getattr(logging, 'INFO', None), None)
-    log.info('Note that Docker requires sudo.')
 
 
 @cli.command()
@@ -30,6 +29,7 @@ def cli():
                    'Disabled by default.')
 def run(image_tag, use_sandbox, pipe_stdin):
     """Start an artifact container."""
+    log.info('Note that Docker requires sudo.')
     docker.docker_run(image_tag, use_sandbox, pipe_stdin)
 
 
