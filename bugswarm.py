@@ -34,12 +34,18 @@ def run(image_tag, use_sandbox, pipe_stdin):
 
 
 @cli.command()
-@click.option('--image-tag', required=True,
+@click.option('--image-tag', required=False,
               type=str,
               help='The artifact image tag.')
-def show(image_tag):
+@click.option('--all', is_flag=True)
+def show(image_tag, all):
     """Display artifact metadata."""
-    log.info('Showing metadata for artifact with image tag', image_tag + '.')
-    response = bugswarmapi.find_artifact(image_tag)
-    artifact = response.json()
-    log.info(pprint.pformat(artifact, indent=2))
+    if all:
+        log.info('Gathering metadata for all artifacts. This might take a minute.')
+        results = bugswarmapi.list_artifacts()
+        log.info(pprint.pformat(results, indent=2))
+    elif image_tag:
+        log.info('Showing metadata for artifact with image tag', image_tag + '.')
+        response = bugswarmapi.find_artifact(image_tag)
+        artifact = response.json()
+        log.info(pprint.pformat(artifact, indent=2))
