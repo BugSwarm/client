@@ -29,7 +29,10 @@ def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False):
         log.info('Binding host sandbox', host_sandbox, 'to container directory', container_sandbox)
 
     # Communicate progress to the user.
-    log.info('Entering the container.')
+    if use_pipe_stdin:
+        log.info('Entering the container and executing the commands on stdin.')
+    else:
+        log.info('Entering the container.')
 
     image_location = _image_location(image_tag)
 
