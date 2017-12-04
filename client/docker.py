@@ -30,7 +30,7 @@ def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False):
 
     # Communicate progress to the user.
     if use_pipe_stdin:
-        log.info('Entering the container and executing the commands on stdin.')
+        log.info('Entering the container and executing the contents of stdin inside the container.')
     else:
         log.info('Entering the container.')
 
