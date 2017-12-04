@@ -28,7 +28,8 @@ def cli():
                    'This option supports heredocs in shells that support them. '
                    'Disabled by default.')
 @click.option('--rm/--no-rm', default=True,
-              help='If enabled, artifact containers will be cleaned up automatically after use.'
+              help='If enabled, artifact containers will be cleaned up automatically after use. '
+                   'Disable this behavior if you want to inspect the container filesystem after use. '
                    'Enabled by default.')
 def run(image_tag, use_sandbox, pipe_stdin, rm):
     """Start an artifact container."""
