@@ -16,6 +16,7 @@ def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False, use_rm=False)
     assert isinstance(image_tag, str) and not image_tag.isspace()
     assert isinstance(use_sandbox, bool)
     assert isinstance(use_pipe_stdin, bool)
+    assert isinstance(use_rm, bool)
 
     # First, try to pull the image.
     ok = docker_pull(image_tag)
