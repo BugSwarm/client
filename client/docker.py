@@ -12,7 +12,7 @@ CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False):
+def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False, use_rm=False):
     assert isinstance(image_tag, str) and not image_tag.isspace()
     assert isinstance(use_sandbox, bool)
     assert isinstance(use_pipe_stdin, bool)
@@ -34,6 +34,9 @@ def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False):
     else:
         log.info('Entering the container.')
 
+    if use_rm:
+        log.info('The container will be cleaned up after use.')
+
     image_location = _image_location(image_tag)
 
     # Prepare the arguments for the docker run command.
@@ -41,6 +44,7 @@ def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False):
     # The -t option must not be used in order to use a heredoc.
     input_args = ['-i'] if use_pipe_stdin else ['-i', '-t']
     subprocess_stdin = sys.stdin if use_pipe_stdin else None
+    rm_args = ['--rm'] if use_rm else []
     # If we're using a shared directory, we need to modify the start script to change the permissions of the shared
     # directory on the container side. However, this will also change the permissions on the host side.
     script_args = [SCRIPT_DEFAULT]
@@ -56,7 +60,7 @@ def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False):
     # Try to run the image.
     # The tail arguments must be at the end of the command.
     tail_args = [image_location] + script_args
-    args = ['sudo', 'docker', 'run', '--privileged'] + volume_args + input_args + tail_args
+    args = ['sudo', 'docker', 'run', '--privileged'] + rm_args + volume_args + input_args + tail_args
     process = subprocess.Popen(args, stdin=subprocess_stdin)
     _ = process.communicate()
     return process.returncode == 0

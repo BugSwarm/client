@@ -25,12 +25,15 @@ def cli():
 @click.option('--use-sandbox/--no-use-sandbox', default=False,
               help='Whether to set up a directory that is shared by the host and container.')
 @click.option('--pipe-stdin/--no-pipe-stdin', default=False,
-              help='If enabled, the contents of stdin are executed in the container. '
+              help='If enabled, the contents of stdin are executed inside the container. '
                    'This option supports heredocs in shells that support them. '
                    'Disabled by default.')
-def run(image_tag, use_sandbox, pipe_stdin):
+@click.option('--rm/--no-rm', default=True,
+              help='If enabled, artifact containers will be cleaned up automatically after use.'
+                   'Enabled by default.')
+def run(image_tag, use_sandbox, pipe_stdin, rm):
     """Start an artifact container."""
-    docker.docker_run(image_tag, use_sandbox, pipe_stdin)
+    docker.docker_run(image_tag, use_sandbox, pipe_stdin, rm)
 
 
 @cli.command()
