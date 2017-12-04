@@ -12,7 +12,7 @@ CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def docker_run(image_tag, use_sandbox=False, use_pipe_stdin=False, use_rm=False):
+def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     assert isinstance(image_tag, str) and not image_tag.isspace()
     assert isinstance(use_sandbox, bool)
     assert isinstance(use_pipe_stdin, bool)
