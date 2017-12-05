@@ -13,7 +13,6 @@ setup(
     version='0.1',
     description='The BugSwarm CLI',
     author='Naji Dmeiri',
-    author_email='nddmeiri@ucdavis.edu',
     maintainer='',
     maintainer_email='',
     url='https://github.com/BugSwarm/client',
