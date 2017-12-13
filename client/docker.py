@@ -27,7 +27,9 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     host_sandbox = _default_host_sandbox()
     container_sandbox = CONTAINER_SANDBOX_DEFAULT
     if use_sandbox:
-        os.makedirs(host_sandbox, exist_ok=True)
+        if not os.path.exists(host_sandbox):
+            log.info('Creating', host_sandbox, 'as the host sandbox.')
+            os.makedirs(host_sandbox, exist_ok=True)
         log.info('Binding host sandbox', host_sandbox, 'to container directory', container_sandbox)
 
     # Communicate progress to the user.
