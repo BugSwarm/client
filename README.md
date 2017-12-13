@@ -12,7 +12,7 @@ A command line client to interface with the [BugSwarm](https://bugswarm.github.i
 > Installation will be a single command after after we register the tool on PyPI.
 1. Clone this repository.
     ```
-    $ git clone
+    $ git clone https://github.com/BugSwarm/client.git
     ```
 1. `cd` into the root directory of this repository.
     ```
