@@ -33,7 +33,7 @@ def cli():
                    'Enabled by default.')
 def run(image_tag, use_sandbox, pipe_stdin, rm):
     """Start an artifact container."""
-    log.info('Note that Docker requires sudo.')
+    log.info('Note that Docker requires sudo privileges.')
     docker.docker_run(image_tag, use_sandbox, pipe_stdin, rm)
 
 
