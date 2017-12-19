@@ -1,4 +1,4 @@
 Click==6.7
 requests==2.18.4
 
-git+https://github.com/BugSwarm/common.git#egg=bugswarmcommon
+git+https://github.com/BugSwarm/common.git#egg=bugswarm-common
