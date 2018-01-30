@@ -14,7 +14,7 @@ from client import docker
 def cli():
     """A command line interface for the BugSwarm dataset."""
     # Configure logging.
-    log.config_logging(getattr(logging, 'INFO', None), None)
+    log.config_logging(getattr(logging, 'INFO', None))
 
 
 @cli.command()
