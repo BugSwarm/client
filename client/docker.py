@@ -67,7 +67,7 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     tail_args = [image_location] + script_args
     args = ['sudo', 'docker', 'run', '--privileged'] + rm_args + volume_args + input_args + tail_args
     command = ' '.join(args)
-    _, _, returncode = ShellWrapper.run_commands(command, stdin=subprocess_stdin)
+    _, _, returncode = ShellWrapper.run_commands(command, stdin=subprocess_stdin, shell=True)
     return returncode == 0
 
 
@@ -81,7 +81,7 @@ def docker_pull(image_tag):
 
     image_location = _image_location(image_tag)
     command = 'sudo docker pull {}'.format(image_location)
-    _, _, returncode = ShellWrapper.run_commands(command)
+    _, _, returncode = ShellWrapper.run_commands(command, shell=True)
     if returncode != 0:
         log.error('Could not download the image', image_location, 'from Docker Hub.')
     else:
@@ -93,7 +93,8 @@ def docker_pull(image_tag):
 def _docker_image_inspect(image_tag):
     image_location = _image_location(image_tag)
     command = 'sudo docker image inspect {}'.format(image_location)
-    _, _, returncode = ShellWrapper.run_commands(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    _, _, returncode = ShellWrapper.run_commands(command,
+                                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
     # For a non-existent image, docker image inspect has a non-zero exit status.
     if returncode == 0:
         log.info('The image', image_location, 'already exists locally and is up to date.')
