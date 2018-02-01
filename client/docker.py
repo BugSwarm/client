@@ -4,6 +4,7 @@ import sys
 
 from bugswarmcommon import log
 from bugswarmcommon.credentials import DOCKER_HUB_REPO
+from bugswarmcommon.shell_wrapper import ShellWrapper
 
 SCRIPT_DEFAULT = '/bin/bash'
 HOST_SANDBOX_DEFAULT = '~/bugswarm-sandbox'
@@ -65,9 +66,9 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     # The tail arguments must be at the end of the command.
     tail_args = [image_location] + script_args
     args = ['sudo', 'docker', 'run', '--privileged'] + rm_args + volume_args + input_args + tail_args
-    process = subprocess.Popen(args, stdin=subprocess_stdin)
-    _ = process.communicate()
-    return process.returncode == 0
+    command = ' '.join(args)
+    _, _, returncode = ShellWrapper.run_commands(command, stdin=subprocess_stdin)
+    return returncode == 0
 
 
 def docker_pull(image_tag):
@@ -79,26 +80,24 @@ def docker_pull(image_tag):
         return True
 
     image_location = _image_location(image_tag)
-    args = ['sudo', 'docker', 'pull', image_location]
-    process = subprocess.Popen(args)
-    _ = process.communicate()
-    if process.returncode != 0:
+    command = 'sudo docker pull {}'.format(image_location)
+    _, _, returncode = ShellWrapper.run_commands(command)
+    if returncode != 0:
         log.error('Could not download the image', image_location, 'from Docker Hub.')
     else:
         log.info('Downloaded the image', image_location + '.')
-    return process.returncode == 0
+    return returncode == 0
 
 
 # Returns True if the image already exists locally.
 def _docker_image_inspect(image_tag):
     image_location = _image_location(image_tag)
-    args = ['sudo', 'docker', 'image', 'inspect', image_location]
-    process = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    _ = process.communicate()
+    command = 'sudo docker image inspect {}'.format(image_location)
+    _, _, returncode = ShellWrapper.run_commands(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     # For a non-existent image, docker image inspect has a non-zero exit status.
-    if process.returncode == 0:
+    if returncode == 0:
         log.info('The image', image_location, 'already exists locally and is up to date.')
-    return process.returncode == 0
+    return returncode == 0
 
 
 # Returns True if the image already exists locally.
