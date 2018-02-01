@@ -67,7 +67,7 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     tail_args = [image_location] + script_args
     args = ['sudo', 'docker', 'run', '--privileged'] + rm_args + volume_args + input_args + tail_args
     command = ' '.join(args)
-    _, _, returncode = ShellWrapper.run_commands(command, stdin=subprocess_stdin, shell=True)
+    _, _, returncode = ShellWrapper.run_commands(command, stdin=subprocess_stdin, stdout=subprocess.PIPE, shell=True)
     return returncode == 0
 
 
@@ -81,7 +81,7 @@ def docker_pull(image_tag):
 
     image_location = _image_location(image_tag)
     command = 'sudo docker pull {}'.format(image_location)
-    _, _, returncode = ShellWrapper.run_commands(command, shell=True)
+    _, _, returncode = ShellWrapper.run_commands(command, stdout=subprocess.PIPE, shell=True)
     if returncode != 0:
         log.error('Could not download the image', image_location, 'from Docker Hub.')
     else:
