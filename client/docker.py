@@ -48,7 +48,8 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     volume_args = ['-v', '{}:{}'.format(host_sandbox, container_sandbox)] if use_sandbox else []
     # The -t option must not be used in order to use a heredoc.
     input_args = ['-i'] if use_pipe_stdin else ['-i', '-t']
-    subprocess_stdin = sys.stdin if use_pipe_stdin else None
+    subprocess_input = sys.stdin.read() if use_pipe_stdin else None
+    subprocess_universal_newlines = use_pipe_stdin
     rm_args = ['--rm'] if use_rm else []
     # If we're using a shared directory, we need to modify the start script to change the permissions of the shared
     # directory on the container side. However, this will also change the permissions on the host side.
@@ -67,7 +68,10 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     tail_args = [image_location] + script_args
     args = ['sudo', 'docker', 'run', '--privileged'] + rm_args + volume_args + input_args + tail_args
     command = ' '.join(args)
-    _, _, returncode = ShellWrapper.run_commands(command, stdin=subprocess_stdin, stdout=subprocess.PIPE, shell=True)
+    _, _, returncode = ShellWrapper.run_commands(command,
+                                                 input=subprocess_input,
+                                                 universal_newlines=subprocess_universal_newlines,
+                                                 shell=True)
     return returncode == 0
 
 
