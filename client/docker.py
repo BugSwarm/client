@@ -55,7 +55,7 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     # directory on the container side. However, this will also change the permissions on the host side.
     script_args = [SCRIPT_DEFAULT]
     if use_sandbox:
-        start_command = 'sudo chmod -R 777 {} && cd {} && umask 000 && cd .. && {}'.format(
+        start_command = '"sudo chmod -R 777 {} && cd {} && umask 000 && cd .. && {}"'.format(
             container_sandbox, container_sandbox, SCRIPT_DEFAULT)
         # These arguments represent a command of the following form:
         # /bin/bash -c "sudo chmod 777 <container_sandbox> && cd <container_sandbox> && umask 000 && /bin/bash"
