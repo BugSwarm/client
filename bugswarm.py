@@ -1,3 +1,4 @@
+import json
 import logging
 import pprint
 
@@ -47,9 +48,10 @@ def show(image_tag, all):
     if all:
         log.info('Gathering metadata for all artifacts. This might take a minute.')
         results = bugswarmapi.list_artifacts()
-        log.info(pprint.pformat(results, indent=2))
+        # Print without the INFO prefix so the output is easier to parse.
+        print(json.dumps(results, sort_keys=True, indent=4))
     elif image_tag:
-        log.info('Showing metadata for artifact with image tag', image_tag + '.')
         response = bugswarmapi.find_artifact(image_tag)
         artifact = response.json()
-        log.info(pprint.pformat(artifact, indent=2))
+        # Print without the INFO prefix so the output is easier to parse.
+        print(json.dumps(artifact, sort_keys=True, indent=4))
