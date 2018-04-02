@@ -1,6 +1,6 @@
 import json
 import logging
-import pprint
+import os
 
 import click
 
@@ -34,7 +34,9 @@ def cli():
                    'Enabled by default.')
 def run(image_tag, use_sandbox, pipe_stdin, rm):
     """Start an artifact container."""
-    log.info('Note that Docker requires sudo privileges.')
+    # If the script does not already have sudo privileges, then explain to the user why the password prompt will appear.
+    if not os.getuid() == 0:
+        log.info('Docker requires sudo privileges.')
     docker.docker_run(image_tag, use_sandbox, pipe_stdin, rm)
 
 
