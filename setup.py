@@ -12,6 +12,7 @@ setup(
         'client',
         'cli',
     ],
+    zip_safe=False,
     py_modules=[
         'main',
     ],
