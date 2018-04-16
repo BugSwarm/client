@@ -2,9 +2,9 @@ import os
 import subprocess
 import sys
 
-from bugswarmcommon import log
-from bugswarmcommon.credentials import DOCKER_HUB_REPO
-from bugswarmcommon.shell_wrapper import ShellWrapper
+from bugswarm.common import log
+from bugswarm.common.credentials import DOCKER_HUB_REPO
+from bugswarm.common.shell_wrapper import ShellWrapper
 
 SCRIPT_DEFAULT = '/bin/bash'
 HOST_SANDBOX_DEFAULT = '~/bugswarm-sandbox'

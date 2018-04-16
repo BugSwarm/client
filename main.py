@@ -4,8 +4,8 @@ import os
 
 import click
 
-from bugswarmcommon import log
-from bugswarmcommon import rest_api as bugswarmapi
+from bugswarm.common import log
+from bugswarm.common import rest_api as bugswarmapi
 
 from client import docker
 
