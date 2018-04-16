@@ -6,6 +6,7 @@ setup(
     url='https://github.com/BugSwarm/client',
     author='BugSwarm',
     author_email='dev.bugswarm@gmail.com',
+
     description='The BugSwarm CLI',
     keywords=[
         'bugswarm',
