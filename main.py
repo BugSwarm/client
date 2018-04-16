@@ -41,19 +41,12 @@ def run(image_tag, use_sandbox, pipe_stdin, rm):
 
 
 @cli.command()
-@click.option('--image-tag', required=False,
+@click.option('--image-tag', required=True,
               type=str,
               help='The artifact image tag.')
-@click.option('--all', is_flag=True)
-def show(image_tag, all):
+def show(image_tag):
     """Display artifact metadata."""
-    if all:
-        log.info('Gathering metadata for all artifacts. This might take a minute.')
-        results = bugswarmapi.list_artifacts()
-        # Print without the INFO prefix so the output is easier to parse.
-        print(json.dumps(results, sort_keys=True, indent=4))
-    elif image_tag:
-        response = bugswarmapi.find_artifact(image_tag)
-        artifact = response.json()
-        # Print without the INFO prefix so the output is easier to parse.
-        print(json.dumps(artifact, sort_keys=True, indent=4))
+    response = bugswarmapi.find_artifact(image_tag)
+    artifact = response.json()
+    # Print without the INFO prefix so the output is easier to parse.
+    print(json.dumps(artifact, sort_keys=True, indent=4))
