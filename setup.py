@@ -1,21 +1,18 @@
-from distutils.core import setup
+from setuptools import setup
+from setuptools import find_packages
 
 setup(
-    name='bugswarm',
+    name='bugswarm-client',
     version='0.0.1',
     url='https://github.com/BugSwarm/client',
     author='BugSwarm',
     author_email='dev.bugswarm@gmail.com',
 
     description='The BugSwarm CLI',
-    keywords=[
-        'bugswarm',
-        'client',
-        'cli',
-    ],
     zip_safe=False,
-    py_modules=[
-        'main',
+    packages=find_packages(),
+    namespace_packages=[
+        'bugswarm',
     ],
     install_requires=[
         'Click==6.7',
@@ -26,8 +23,9 @@ setup(
         'git+https://github.com/BugSwarm/common.git#egg=bugswarm-common-0.0.1',
     ],
 
-    entry_points='''
-        [console_scripts]
-        bugswarm=main:cli
-    ''',
+    entry_points={
+        'console_scripts': [
+            'bugswarm = bugswarm.client.bugswarm:cli',
+        ],
+    },
 )

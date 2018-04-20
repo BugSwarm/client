@@ -7,7 +7,7 @@ import click
 from bugswarm.common import log
 from bugswarm.common import rest_api as bugswarmapi
 
-from client import docker
+from . import docker
 
 
 @click.group()
