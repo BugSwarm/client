@@ -4,21 +4,13 @@
 
 A command line client to interface with the [BugSwarm](https://bugswarm.github.io) artifact collection.
 
-## Getting Started
-
-### Installation
+## Installation
 > Requires Python 3.
-
 ```
 $ pip3 install bugswarm-client
 ```
 
-### Uninstallation
-```
-$ pip3 uninstall bugswarm-client
-```
-
-### Usage
+## Usage
 - Download a Docker image and enter the Docker container associated with an artifact. Choose an image tag from the [website](http://bugswarm.org/artifact-browser) or via the [REST API](https://github.com/BugSwarm/database#api-endpoints). The script argument is a path to an executable in the container's filesystem that will be executed inside the container.
     ```
     $ bugswarm run --image-tag <image_tag> [--script <script>]
@@ -32,7 +24,7 @@ $ pip3 uninstall bugswarm-client
     $ bugswarm --help
     ```
 
-### Development
+## Development
 1. Clone this repository.
     ```
     $ git clone https://github.com/BugSwarm/client.git
