@@ -9,23 +9,13 @@ A command line client to interface with the [BugSwarm](https://bugswarm.github.i
 ### Installation
 > Requires Python 3.
 
-> Installation will be a single command after after we register the tool on PyPI.
-1. Clone this repository.
-    ```
-    $ git clone https://github.com/BugSwarm/client.git
-    ```
-1. `cd` into the root directory of this repository.
-    ```
-    $ cd client
-    ```
-1. Install the tool.
-    ```
-    $ sudo pip3 install --upgrade --force-reinstall --process-dependency-links -e .
-    ```
+```
+$ pip3 install bugswarm-client
+```
 
 ### Uninstallation
 ```
-$ pip3 uninstall bugswarm
+$ pip3 uninstall bugswarm-client
 ```
 
 ### Usage
@@ -41,3 +31,18 @@ $ pip3 uninstall bugswarm
     ```
     $ bugswarm --help
     ```
+
+### Development
+1. Clone this repository.
+    ```
+    $ git clone https://github.com/BugSwarm/client.git
+    ```
+1. `cd` into the root directory of this repository.
+    ```
+    $ cd client
+    ```
+1. Install the tool.
+    ```
+    $ sudo -H pip3 install --upgrade --force-reinstall --process-dependency-links -e .
+    ```
+Modifications to the source are automatically reflected when the tool is invoked.
