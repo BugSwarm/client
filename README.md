@@ -35,6 +35,6 @@ $ pip3 install bugswarm-client
     ```
 1. Install the tool.
     ```
-    $ sudo -H pip3 install --upgrade --force-reinstall --process-dependency-links -e .
+    $ pip3 install --upgrade --force-reinstall --process-dependency-links -e .
     ```
 Modifications to the source are automatically reflected when the tool is invoked.
