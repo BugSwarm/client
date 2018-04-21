@@ -10,6 +10,10 @@ setup(
 
     description='The BugSwarm CLI',
     long_description='The BugSwarm CLI',
+    classifiers=[
+        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: BSD License',
+    ],
     zip_safe=False,
     packages=find_packages(),
     namespace_packages=[
