@@ -20,9 +20,6 @@ setup(
         'requests==2.18.4',
         'bugswarm-common==0.0.1',
     ],
-    dependency_links=[
-        'git+https://github.com/BugSwarm/common.git#egg=bugswarm-common-0.0.1',
-    ],
 
     entry_points={
         'console_scripts': [
