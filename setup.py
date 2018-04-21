@@ -9,6 +9,7 @@ setup(
     author_email='dev.bugswarm@gmail.com',
 
     description='The BugSwarm CLI',
+    long_description='The BugSwarm CLI',
     zip_safe=False,
     packages=find_packages(),
     namespace_packages=[
