@@ -5,22 +5,10 @@
 A command line client to interface with the [BugSwarm](https://bugswarm.github.io) artifact collection.
 
 ## Installation
-> Requires Python 3.
-1. Clone this repository.
-    ```
-    $ git clone https://github.com/BugSwarm/client.git
-    ```
-1. `cd` into the root directory of this repository.
-    ```
-    $ cd client
-    ```
-1. Install the tool.
-    ```
-    $ pip3 install --upgrade --force-reinstall --process-dependency-links -e .
-    ```
-<!-- ```
+> Requires Python 3 and pip3 10.0.1 or later.
+```
 $ pip3 install bugswarm-client
-``` -->
+```
 
 ## Usage
 - Download a Docker image and enter the Docker container associated with an artifact. Choose an image tag from the [website](http://bugswarm.org/artifact-browser) or via the [REST API](https://github.com/BugSwarm/database#api-endpoints).
