@@ -25,7 +25,7 @@ $ pip3 install bugswarm-client
     ```
 
 ## Development
-Execute the following commands to install the tool in "editable" mode. There is no need to re-install the tool after each source code modification.
+Execute the following commands to install the tool in ["editable" mode](https://pip.pypa.io/en/stable/reference/pip_install/#editable-installs).
 1. Clone this repository.
     ```
     $ git clone https://github.com/BugSwarm/client.git
