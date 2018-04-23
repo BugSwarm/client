@@ -47,7 +47,10 @@ def run(image_tag, use_sandbox, pipe_stdin, rm):
               help='The artifact image tag.')
 def show(image_tag):
     """Display artifact metadata."""
-    response = bugswarmapi.find_artifact(image_tag)
-    artifact = response.json()
-    # Print without the INFO prefix so the output is easier to parse.
-    print(json.dumps(artifact, sort_keys=True, indent=4))
+    response = bugswarmapi.find_artifact(image_tag, error_if_not_found=False)
+    if not response.ok:
+        log.info('No artifact metadata for image tag {}.'.format(image_tag))
+    else:
+        artifact = response.json()
+        # Print without the INFO prefix so the output is easier to parse.
+        print(json.dumps(artifact, sort_keys=True, indent=4))
