@@ -2,7 +2,7 @@
 
 ![The BugSwarm Mascot](https://cloud.githubusercontent.com/assets/8139148/24324903/1101b9a2-114c-11e7-9340-316022ef57d5.png)
 
-A command line client to interface with the [BugSwarm](https://bugswarm.github.io) artifact collection.
+The official command line client for the [BugSwarm](https://bugswarm.org) artifact dataset
 
 ## Installation
 > Requires Python 3 and pip3 10.0.1 or later.
