@@ -23,9 +23,10 @@ $ pip3 install bugswarm-client
     ```
     $ bugswarm --version
     ```
-- Show usage text.
+- Show usage text for the entire tool or for a specific sub-command.
     ```
     $ bugswarm --help
+    $ bugswarm <sub-command> --help
     ```
 
 ## Development
