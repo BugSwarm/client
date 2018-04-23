@@ -19,6 +19,10 @@ $ pip3 install bugswarm-client
     ```
     $ bugswarm show --image-tag <image_tag>
     ```
+- Show the version.
+    ```
+    $ bugswarm --version
+    ```
 - Show usage text.
     ```
     $ bugswarm --help
