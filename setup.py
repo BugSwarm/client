@@ -8,8 +8,8 @@ setup(
     author='BugSwarm',
     author_email='dev.bugswarm@gmail.com',
 
-    description='The BugSwarm CLI',
-    long_description='The BugSwarm CLI',
+    description='The official command line client for the BugSwarm artifact dataset',
+    long_description='The official command line client for the BugSwarm artifact dataset',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: BSD License',
