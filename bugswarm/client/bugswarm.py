@@ -11,7 +11,7 @@ from . import docker
 
 
 @click.group()
-@click.version_option(message='BugSwarm Client, version %(version)s')
+@click.version_option(message='The BugSwarm Client, version %(version)s')
 def cli():
     """A command line interface for the BugSwarm dataset."""
     # Configure logging.
@@ -35,7 +35,7 @@ def cli():
 def run(image_tag, use_sandbox, pipe_stdin, rm):
     """Start an artifact container."""
     # If the script does not already have sudo privileges, then explain to the user why the password prompt will appear.
-    if not os.getuid() == 0:
+    if os.getuid() != 0:
         log.info('Docker requires sudo privileges.')
     docker.docker_run(image_tag, use_sandbox, pipe_stdin, rm)
 
