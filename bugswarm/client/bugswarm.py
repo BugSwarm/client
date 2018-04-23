@@ -8,6 +8,7 @@ from bugswarm.common import log
 from bugswarm.common import rest_api as bugswarmapi
 
 from . import docker
+from .command import MyCommand
 
 
 @click.group()
@@ -18,7 +19,7 @@ def cli():
     log.config_logging(getattr(logging, 'INFO', None))
 
 
-@cli.command()
+@cli.command(cls=MyCommand)
 @click.option('--image-tag', required=True,
               type=str,
               help='The artifact image tag.')
@@ -40,7 +41,7 @@ def run(image_tag, use_sandbox, pipe_stdin, rm):
     docker.docker_run(image_tag, use_sandbox, pipe_stdin, rm)
 
 
-@cli.command()
+@cli.command(cls=MyCommand)
 @click.option('--image-tag', required=True,
               type=str,
               help='The artifact image tag.')
