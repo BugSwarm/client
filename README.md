@@ -5,7 +5,7 @@
 The official command line client for the [BugSwarm](https://bugswarm.org) artifact dataset
 
 ## Installation
-> Requires Python 3 and pip3 10.0.1 or later.
+> Requires Python 3.
 ```
 $ pip3 install bugswarm-client
 ```
