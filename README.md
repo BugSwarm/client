@@ -11,7 +11,7 @@ $ pip3 install bugswarm-client
 ```
 
 ## Usage
-- Download a Docker image and enter the Docker container associated with an artifact. Choose an image tag from the [website](http://bugswarm.org/artifact-browser) or via the [REST API](https://github.com/BugSwarm/database#api-endpoints).
+- Download a Docker image and enter the Docker container associated with an artifact. At this time, we cannot make our website live. Until then, the best way to acquire image tags is to contact us.<!--Choose an image tag from the [website](http://bugswarm.org/artifact-browser) or via the [REST API](https://github.com/BugSwarm/database#api-endpoints).-->
     ```
     $ bugswarm run --image-tag <image_tag>
     ```
