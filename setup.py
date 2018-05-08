@@ -22,7 +22,7 @@ setup(
     install_requires=[
         'Click==6.7',
         'requests==2.18.4',
-        'bugswarm-common==0.0.2',
+        'bugswarm-common==0.0.3',
     ],
 
     entry_points={
