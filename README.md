@@ -11,23 +11,7 @@ $ pip3 install bugswarm-client
 ```
 
 ## Usage
-- Download a Docker image and enter the Docker container associated with an artifact. At this time, we cannot make our website live. Until then, the best way to acquire image tags is to contact us.<!--Choose an image tag from the [website](http://bugswarm.org/artifact-browser) or via the [REST API](https://github.com/BugSwarm/database#api-endpoints).-->
-    ```
-    $ bugswarm run --image-tag <image_tag>
-    ```
-- Show metadata for an artifact.
-    ```
-    $ bugswarm show --image-tag <image_tag>
-    ```
-- Show the version.
-    ```
-    $ bugswarm --version
-    ```
-- Show usage text for the entire tool or for a specific sub-command.
-    ```
-    $ bugswarm --help
-    $ bugswarm <sub-command> --help
-    ```
+See [this documentation page](http://www.bugswarm.org/docs/toolset/bugswarm-cli).
 
 ## Development
 Execute the following commands to install the tool in ["editable" mode](https://pip.pypa.io/en/stable/reference/pip_install/#editable-installs).
