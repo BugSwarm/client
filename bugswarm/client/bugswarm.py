@@ -33,10 +33,6 @@ def cli():
               help='If enabled, artifact containers will be cleaned up automatically after use. '
                    'Disable this behavior if you want to inspect the container filesystem after use. '
                    'Enabled by default.')
-@click.option('--token',
-              type=str,
-              help='An authentication token for the BugSwarm database. '
-                   'Please visit the www.bugswarm.org/get-full-access for more information.')
 def run(image_tag, use_sandbox, pipe_stdin, rm):
     """Start an artifact container."""
     # If the script does not already have sudo privileges, then explain to the user why the password prompt will appear.
@@ -49,13 +45,12 @@ def run(image_tag, use_sandbox, pipe_stdin, rm):
 @click.option('--image-tag', required=True,
               type=str,
               help='The artifact image tag.')
-@click.option('--token',
+@click.option('--token', required=True,
               type=str,
               help='An authentication token for the BugSwarm database. '
-                   'Please visit the www.bugswarm.org/get-full-access for more information.')
+                   'Please visit www.bugswarm.org/get-full-access for more information.')
 def show(image_tag, token):
     """Display artifact metadata."""
-    print('token is [{}]'.format(token))
     token = token or ''
     bugswarmapi = DatabaseAPI(token=token)
     response = bugswarmapi.find_artifact(image_tag, error_if_not_found=False)
