@@ -55,7 +55,7 @@ def show(image_tag, token):
     bugswarmapi = DatabaseAPI(token=token)
     response = bugswarmapi.find_artifact(image_tag, error_if_not_found=False)
     if not response.ok:
-        log.info('No artifact metadata for image tag {}.'.format(image_tag))
+        log.info('No artifact metadata found for image tag {}.'.format(image_tag))
     else:
         artifact = response.json()
         # Print without the INFO prefix so the output is easier to parse.
