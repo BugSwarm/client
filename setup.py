@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='bugswarm-client',
-    version='0.1.4',
+    version='0.1.6',
     url='https://github.com/BugSwarm/client',
     author='BugSwarm',
     author_email='dev.bugswarm@gmail.com',
@@ -22,7 +22,7 @@ setup(
     install_requires=[
         'Click==6.7',
         'requests>=2.20.0',
-        'bugswarm-common==0.1.12',
+        'bugswarm-common==0.1.13',
     ],
 
     entry_points={
