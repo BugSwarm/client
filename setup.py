@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='bugswarm-client',
-    version='0.1.6',
+    version='0.1.7',
     url='https://github.com/BugSwarm/client',
     author='BugSwarm',
     author_email='dev.bugswarm@gmail.com',
