@@ -13,14 +13,15 @@ CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
 # The executed script can be changed by passing the script argument.
-def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
+def docker_run(docker_hub_repo, image_tag, use_sandbox, use_pipe_stdin, use_rm):
+    assert (isinstance(docker_hub_repo, str) and not docker_hub_repo.isspace()) or docker_hub_repo is None
     assert isinstance(image_tag, str) and not image_tag.isspace()
     assert isinstance(use_sandbox, bool)
     assert isinstance(use_pipe_stdin, bool)
     assert isinstance(use_rm, bool)
 
     # First, try to pull the image.
-    ok = docker_pull(image_tag)
+    ok = docker_pull(docker_hub_repo, image_tag)
     if not ok:
         return False
 
@@ -42,7 +43,7 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     if use_rm:
         log.info('The container will be cleaned up after use.')
 
-    image_location = _image_location(image_tag)
+    image_location = _image_location(docker_hub_repo, image_tag)
 
     # Prepare the arguments for the docker run command.
     volume_args = ['-v', '{}:{}'.format(host_sandbox, container_sandbox)] if use_sandbox else []
@@ -75,15 +76,16 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     return returncode == 0
 
 
-def docker_pull(image_tag):
+def docker_pull(docker_hub_repo, image_tag):
+    assert (isinstance(docker_hub_repo, str) and not docker_hub_repo.isspace()) or docker_hub_repo is None
     assert image_tag
     assert isinstance(image_tag, str)
 
     # Exit early if the image already exists locally.
-    if _image_exists_locally(image_tag):
+    if _image_exists_locally(docker_hub_repo, image_tag):
         return True
 
-    image_location = _image_location(image_tag)
+    image_location = _image_location(docker_hub_repo, image_tag)
     command = 'sudo docker pull {}'.format(image_location)
     _, _, returncode = ShellWrapper.run_commands(command, shell=True)
     if returncode != 0:
@@ -94,8 +96,8 @@ def docker_pull(image_tag):
 
 
 # Returns True if the image already exists locally.
-def _docker_image_inspect(image_tag):
-    image_location = _image_location(image_tag)
+def _docker_image_inspect(docker_hub_repo, image_tag):
+    image_location = _image_location(docker_hub_repo, image_tag)
     command = 'sudo docker image inspect {}'.format(image_location)
     _, _, returncode = ShellWrapper.run_commands(command,
                                                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
@@ -106,14 +108,18 @@ def _docker_image_inspect(image_tag):
 
 
 # Returns True if the image already exists locally.
-def _image_exists_locally(image_tag):
-    return _docker_image_inspect(image_tag)
+def _image_exists_locally(docker_hub_repo, image_tag):
+    return _docker_image_inspect(docker_hub_repo, image_tag)
 
 
-def _image_location(image_tag):
+def _image_location(docker_hub_repo, image_tag):
+    assert (isinstance(docker_hub_repo, str) and not docker_hub_repo.isspace()) or docker_hub_repo is None
     assert image_tag
     assert isinstance(image_tag, str)
-    return DOCKER_HUB_REPO + ':' + image_tag
+    if docker_hub_repo is None:
+        return DOCKER_HUB_REPO + ':' + image_tag
+    else:
+        return docker_hub_repo + ':' + image_tag
 
 
 def _default_host_sandbox():

@@ -20,6 +20,9 @@ def cli():
 
 
 @cli.command(cls=MyCommand)
+@click.option('--docker-hub-repo', default=None,
+              type=str,
+              help='Override the default Docker Hub repo (bugswarm/images)')
 @click.option('--image-tag', required=True,
               type=str,
               help='The artifact image tag.')
@@ -33,12 +36,12 @@ def cli():
               help='If enabled, artifact containers will be cleaned up automatically after use. '
                    'Disable this behavior if you want to inspect the container filesystem after use. '
                    'Enabled by default.')
-def run(image_tag, use_sandbox, pipe_stdin, rm):
+def run(docker_hub_repo, image_tag, use_sandbox, pipe_stdin, rm):
     """Start an artifact container."""
     # If the script does not already have sudo privileges, then explain to the user why the password prompt will appear.
     if os.getuid() != 0:
         log.info('Docker requires sudo privileges.')
-    docker.docker_run(image_tag, use_sandbox, pipe_stdin, rm)
+    docker.docker_run(docker_hub_repo, image_tag, use_sandbox, pipe_stdin, rm)
 
 
 @cli.command(cls=MyCommand)
