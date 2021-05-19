@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 from bugswarm.common import log
-from bugswarm.common.credentials import DOCKER_HUB_REPO
+from bugswarm.common.credentials import DOCKER_HUB_CACHED_REPO
 from bugswarm.common.shell_wrapper import ShellWrapper
 
 SCRIPT_DEFAULT = '/bin/bash'
@@ -113,7 +113,7 @@ def _image_exists_locally(image_tag):
 def _image_location(image_tag):
     assert image_tag
     assert isinstance(image_tag, str)
-    return DOCKER_HUB_REPO + ':' + image_tag
+    return DOCKER_HUB_CACHED_REPO + ':' + image_tag
 
 
 def _default_host_sandbox():
