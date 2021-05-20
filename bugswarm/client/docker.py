@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 from bugswarm.common import log
-from bugswarm.common.credentials import DOCKER_HUB_CACHED_REPO
+from bugswarm.common.credentials import DOCKER_HUB_REPO, DOCKER_HUB_CACHED_REPO
 from bugswarm.common.shell_wrapper import ShellWrapper
 
 SCRIPT_DEFAULT = '/bin/bash'
@@ -87,7 +87,14 @@ def docker_pull(image_tag):
     command = 'sudo docker pull {}'.format(image_location)
     _, _, returncode = ShellWrapper.run_commands(command, shell=True)
     if returncode != 0:
-        log.error('Could not download the image', image_location, 'from Docker Hub.')
+        # We try to pull from bugswarm/images instead of cached-images
+        image_location = '{}:{}'.format(DOCKER_HUB_REPO, image_tag)
+        command = 'sudo docker pull {}'.format(image_location)
+        _, _, returncode = ShellWrapper.run_commands(command, shell=True)
+        if returncode != 0:
+            log.error('Could not download the image', image_location, 'from Docker Hub.')
+        else:
+            log.info('Downloaded the image', image_location + '.')
     else:
         log.info('Downloaded the image', image_location + '.')
     return returncode == 0
