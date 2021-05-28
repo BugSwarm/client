@@ -87,12 +87,12 @@ def docker_pull(image_tag):
     command = 'sudo docker pull {}'.format(image_location)
     _, _, returncode = ShellWrapper.run_commands(command, shell=True)
     if returncode != 0:
-        # We try to pull from bugswarm/images instead of cached-images
+        # Image is not cached. Attempt to pull from bugswarm/images.
         image_location = '{}:{}'.format(DOCKER_HUB_REPO, image_tag)
         command = 'sudo docker pull {}'.format(image_location)
         _, _, returncode = ShellWrapper.run_commands(command, shell=True)
         if returncode != 0:
-            log.error('Could not download the image', image_location, 'from Docker Hub.')
+            log.error('Could not download the image', image_location)
         else:
             log.info('Downloaded the image', image_location + '.')
     else:
