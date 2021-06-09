@@ -92,6 +92,7 @@ def docker_pull(image_tag):
         command = 'sudo docker pull {}'.format(image_location)
         _, _, returncode = ShellWrapper.run_commands(command, shell=True)
         if returncode != 0:
+        # Image is not in bugswarm/images
             log.error('Could not download the image', image_location)
         else:
             log.info('Downloaded the image', image_location + '.')
