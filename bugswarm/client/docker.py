@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 from bugswarm.common import log
-from bugswarm.common.credentials import DOCKER_HUB_REPO
+from bugswarm.common.credentials import DOCKER_HUB_REPO, DOCKER_HUB_CACHED_REPO
 from bugswarm.common.shell_wrapper import ShellWrapper
 
 SCRIPT_DEFAULT = '/bin/bash'
@@ -20,7 +20,7 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     assert isinstance(use_rm, bool)
 
     # First, try to pull the image.
-    ok = docker_pull(image_tag)
+    ok, image_location = docker_pull(image_tag)
     if not ok:
         return False
 
@@ -41,8 +41,6 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
 
     if use_rm:
         log.info('The container will be cleaned up after use.')
-
-    image_location = _image_location(image_tag)
 
     # Prepare the arguments for the docker run command.
     volume_args = ['-v', '{}:{}'.format(host_sandbox, container_sandbox)] if use_sandbox else []
@@ -68,6 +66,7 @@ def docker_run(image_tag, use_sandbox, use_pipe_stdin, use_rm):
     tail_args = [image_location] + script_args
     args = ['sudo', 'docker', 'run', '--privileged'] + rm_args + volume_args + input_args + tail_args
     command = ' '.join(args)
+    print(command)
     _, _, returncode = ShellWrapper.run_commands(command,
                                                  input=subprocess_input,
                                                  universal_newlines=subprocess_universal_newlines,
@@ -87,10 +86,18 @@ def docker_pull(image_tag):
     command = 'sudo docker pull {}'.format(image_location)
     _, _, returncode = ShellWrapper.run_commands(command, shell=True)
     if returncode != 0:
-        log.error('Could not download the image', image_location, 'from Docker Hub.')
+        # Image is not cached. Attempt to pull from bugswarm/images.
+        image_location = '{}:{}'.format(DOCKER_HUB_REPO, image_tag)
+        command = 'sudo docker pull {}'.format(image_location)
+        _, _, returncode = ShellWrapper.run_commands(command, shell=True)
+        if returncode != 0:
+        # Image is not in bugswarm/images
+            log.error('Could not download the image', image_location)
+        else:
+            log.info('Downloaded the image', image_location + '.')
     else:
         log.info('Downloaded the image', image_location + '.')
-    return returncode == 0
+    return returncode == 0, image_location
 
 
 # Returns True if the image already exists locally.
@@ -113,8 +120,9 @@ def _image_exists_locally(image_tag):
 def _image_location(image_tag):
     assert image_tag
     assert isinstance(image_tag, str)
-    return DOCKER_HUB_REPO + ':' + image_tag
+    return DOCKER_HUB_CACHED_REPO + ':' + image_tag
 
 
 def _default_host_sandbox():
     return os.path.expanduser(HOST_SANDBOX_DEFAULT)
+

@@ -13,6 +13,8 @@ $ pip3 install bugswarm-client
 ## Usage
 See [this documentation page](http://www.bugswarm.org/docs/toolset/bugswarm-cli).
 
+Please note that artifacts are first attempted to be pulled from `bugswarm/cached-images`, and if not found then they are attempted to be pulled from `bugswarm/images`.
+
 ## Development
 Execute the following commands to install the tool in ["editable" mode](https://pip.pypa.io/en/stable/reference/pip_install/#editable-installs).
 1. Clone this repository.
