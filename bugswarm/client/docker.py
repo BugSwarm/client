@@ -3,12 +3,17 @@ import subprocess
 import sys
 
 from bugswarm.common import log
-from bugswarm.common.credentials import DOCKER_HUB_REPO, DOCKER_HUB_CACHED_REPO
 from bugswarm.common.shell_wrapper import ShellWrapper
+import bugswarm.common.credentials as credentials
 
 SCRIPT_DEFAULT = '/bin/bash'
 HOST_SANDBOX_DEFAULT = '~/bugswarm-sandbox'
 CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
+
+DOCKER_HUB_REPO = \
+    credentials.DOCKER_HUB_REPO if hasattr(credentials, 'DOCKER_HUB_REPO') else 'bugswarm/images'
+DOCKER_HUB_CACHED_REPO = \
+    credentials.DOCKER_HUB_CACHED_REPO if hasattr(credentials, 'DOCKER_HUB_CACHED_REPO') else 'bugswarm/cached-images'
 
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
@@ -80,7 +85,7 @@ def docker_pull(image_tag):
 
     # Exit early if the image already exists locally.
     if _image_exists_locally(image_tag):
-        return True
+        return True, _image_location(image_tag)
 
     image_location = _image_location(image_tag)
     command = 'sudo docker pull {}'.format(image_location)
