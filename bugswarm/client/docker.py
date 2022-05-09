@@ -84,8 +84,9 @@ def docker_pull(image_tag):
     assert isinstance(image_tag, str)
 
     # Exit early if the image already exists locally.
-    if _image_exists_locally(image_tag):
-        return True, _image_location(image_tag)
+    exists, image_location = _image_exists_locally(image_tag)
+    if exists:
+        return True, image_location
 
     image_location = _image_location(image_tag)
     command = 'sudo docker pull {}'.format(image_location)
@@ -112,12 +113,19 @@ def _docker_image_inspect(image_tag):
     _, _, returncode = ShellWrapper.run_commands(command,
                                                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
     # For a non-existent image, docker image inspect has a non-zero exit status.
-    if returncode == 0:
+    if returncode != 0:
+        image_location = '{}:{}'.format(DOCKER_HUB_REPO, image_tag)
+        command = 'sudo docker image inspect {}'.format(image_location)
+        _, _, returncode = ShellWrapper.run_commands(command,
+                                                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
+        if returncode == 0:
+            log.info('The image', image_location, 'already exists locally and is up to date.')
+    else:
         log.info('The image', image_location, 'already exists locally and is up to date.')
-    return returncode == 0
+    return returncode == 0, image_location
 
 
-# Returns True if the image already exists locally.
+# Returns True and image_location if the image already exists locally.
 def _image_exists_locally(image_tag):
     return _docker_image_inspect(image_tag)
 
