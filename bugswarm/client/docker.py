@@ -106,7 +106,7 @@ def docker_pull(image_tag):
     return returncode == 0, image_location
 
 
-# Returns True if the image already exists locally.
+# Returns True and image_location if the image already exists locally.
 def _docker_image_inspect(image_tag):
     image_location = _image_location(image_tag)
     command = 'sudo docker image inspect {}'.format(image_location)
