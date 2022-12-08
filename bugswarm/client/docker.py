@@ -10,10 +10,14 @@ SCRIPT_DEFAULT = '/bin/bash'
 HOST_SANDBOX_DEFAULT = '~/bugswarm-sandbox'
 CONTAINER_SANDBOX_DEFAULT = '/bugswarm-sandbox'
 
-DOCKER_HUB_REPO = \
-    credentials.DOCKER_HUB_REPO if hasattr(credentials, 'DOCKER_HUB_REPO') else 'bugswarm/images'
-DOCKER_HUB_CACHED_REPO = \
-    credentials.DOCKER_HUB_CACHED_REPO if hasattr(credentials, 'DOCKER_HUB_CACHED_REPO') else 'bugswarm/cached-images'
+if hasattr(credentials, 'DOCKER_HUB_REPO') and credentials.DOCKER_HUB_REPO != '#':
+    DOCKER_HUB_REPO = credentials.DOCKER_HUB_REPO
+else:
+    DOCKER_HUB_REPO = 'bugswarm/images'
+if hasattr(credentials, 'DOCKER_HUB_CACHED_REPO') and credentials.DOCKER_HUB_CACHED_REPO != '#':
+    DOCKER_HUB_REPO = credentials.DOCKER_HUB_CACHED_REPO
+else:
+    DOCKER_HUB_REPO = 'bugswarm/cached-images'
 
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
@@ -97,7 +101,7 @@ def docker_pull(image_tag):
         command = 'sudo docker pull {}'.format(image_location)
         _, _, returncode = ShellWrapper.run_commands(command, shell=True)
         if returncode != 0:
-        # Image is not in bugswarm/images
+            # Image is not in bugswarm/images
             log.error('Could not download the image', image_location)
         else:
             log.info('Downloaded the image', image_location + '.')
@@ -138,4 +142,3 @@ def _image_location(image_tag):
 
 def _default_host_sandbox():
     return os.path.expanduser(HOST_SANDBOX_DEFAULT)
-
