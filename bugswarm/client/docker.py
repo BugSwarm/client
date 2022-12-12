@@ -15,9 +15,9 @@ if hasattr(credentials, 'DOCKER_HUB_REPO') and credentials.DOCKER_HUB_REPO != '#
 else:
     DOCKER_HUB_REPO = 'bugswarm/images'
 if hasattr(credentials, 'DOCKER_HUB_CACHED_REPO') and credentials.DOCKER_HUB_CACHED_REPO != '#':
-    DOCKER_HUB_REPO = credentials.DOCKER_HUB_CACHED_REPO
+    DOCKER_HUB_CACHED_REPO = credentials.DOCKER_HUB_CACHED_REPO
 else:
-    DOCKER_HUB_REPO = 'bugswarm/cached-images'
+    DOCKER_HUB_CACHED_REPO = 'bugswarm/cached-images'
 
 
 # By default, this function downloads the image, enters the container, and executes '/bin/bash' in the container.
