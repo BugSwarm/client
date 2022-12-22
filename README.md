@@ -48,13 +48,13 @@ Please note that artifacts are first attempted to be pulled from `bugswarm/cache
 
 ```shell
 $ bugswarm run --image-tag nutzam-nutz-140438299
-$ bugswarm show --image-tag nutzam-nutz-140438299 --token <token>
+$ bugswarm show --image-tag nutzam-nutz-140438299 [--token <token>]
 ```
 
-> [Requires a token](http://www.bugswarm.org/contact/)
+> You can use BugSwarm Client without a token. However, unauthenticated requests are subject to rate limits. [You can request a token here.](http://www.bugswarm.org/contact/)
 
 ## Development
-Execute the following commands to install the tool in ["editable" mode](https://pip.pypa.io/en/stable/cli/pip_install/#editable-installs).
+Execute the following commands to install the tool.
 1. Clone this repository.
     ```
     $ git clone https://github.com/BugSwarm/client.git
@@ -65,5 +65,5 @@ Execute the following commands to install the tool in ["editable" mode](https://
     ```
 1. Install the tool.
     ```
-    $ pip3 install --upgrade --force-reinstall -e .
+    $ pip3 install --upgrade --force-reinstall .
     ```
